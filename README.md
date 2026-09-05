@@ -100,11 +100,11 @@ async def handler(some_arg: str) -> Component:
     return Div(f"Got: {some_arg}")
 ```
 
-The handler returns a `Component`, an iterable of `Components`, or passes through a `Response` (e.g. `RedirectResponse`). Handlers must not be generator functions — returning generator output is rejected at decoration time; build a list, or return a `StreamingResponse`. For HTMX requests (`HX-Request: true`) heflex returns the rendered HTML fragment. For normal requests it wraps the output in a page layout. If the handler does not accept a `Request` parameter, heflex adds one automatically.
+The handler returns a `Component`, an iterable of `Components`, or passes through a `Response` (e.g. `RedirectResponse`). **Async generator** handlers are also first-class: they stream `text/event-stream` (SSE) — see [Server-Sent Events](#server-sent-events-sse). Sync generator handlers are rejected at decoration time (FastAPI would misclassify them as JSONL streams). For HTMX requests (`HX-Request: true`) heflex returns the rendered HTML fragment. For normal requests it wraps the output in a page layout. If the handler does not accept a `Request` parameter, heflex adds one automatically.
 
 ### Page Layouts
 
-The default layout wraps content in `<html><head><body>` with HTMX v4 from CDN. heflex prepends `<!DOCTYPE html>` before the rendered layout, so your layout should start at the `<html>` element (and HTMX fragment responses never include a doctype). Override with a custom function:
+The default layout wraps content in `<html><head><body>` with HTMX v4 and the `hx-sse` extension from CDN (remove the extension script tag if you don't use SSE). heflex prepends `<!DOCTYPE html>` before the rendered layout, so your layout should start at the `<html>` element (and HTMX fragment responses never include a doctype). Override with a custom function:
 
 ```python
 def my_layout(title: str, *children: Component) -> Component:
@@ -117,17 +117,35 @@ def my_layout(title: str, *children: Component) -> Component:
 hx = Heflex(page_layout=my_layout)
 ```
 
+## Server-Sent Events (SSE)
+
+heflex ships an SSE path built on htmx 4's [`hx-sse` extension](https://four.htmx.org/extensions/hx-sse) (already loaded by the default layout). An async-generator handler streams `text/event-stream`; each yielded item becomes one SSE message:
+
+- `Component`, `str`, or `RawHTML` → unnamed event — htmx swaps it like an HTML response (`hx-target`/`hx-swap` apply)
+- `SSEEvent(event="done", ...)` → named event — dispatches a DOM event / matches `hx-sse:close`; supports `id` (replay) and `retry` fields
+
+```python
+@hx.route("/greeting", methods=["GET"])
+async def greeting():
+    for chunk in ["Hello", ", ", "world", "!"]:
+        yield chunk  # each chunk appends to hx-target="#output" hx-swap="beforeend"
+```
+
+Persistent connections use `hx-sse:connect="/url"` on an element, closed by a named event (`hx-sse:close="done"`). Returning an async generator object from a regular handler is equivalent to being one. See `example/ticker.py`.
+
 ## Examples
 
-The `example/` directory contains two runnable applications:
+The `example/` directory contains three runnable applications:
 
 - `counter.py` — Counter using HTMX outerMorph swaps
 - `sortable.py` — Drag-and-drop sortable list using SortableJS
+- `ticker.py` — SSE: streamed text chunks and a persistent `hx-sse:connect` feed
 
 ```bash
 cd example
 uv run counter.py
 uv run sortable.py
+uv run ticker.py
 ```
 
 ## License

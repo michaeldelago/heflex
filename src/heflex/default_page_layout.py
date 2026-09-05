@@ -16,6 +16,12 @@ def DefaultPageLayout(title: str, *args: Component) -> Component:
             Component(
                 "script", src="https://unpkg.com/htmx.org@4.0.0/dist/htmx.min.js"
             ),
+            # hx-sse extension: makes htmx treat text/event-stream responses
+            # (and hx-sse:connect elements) as Server-Sent Events streams.
+            Component(
+                "script",
+                src="https://unpkg.com/htmx.org@4.0.0/dist/ext/hx-sse.min.js",
+            ),
         ),
         Component(
             "body",

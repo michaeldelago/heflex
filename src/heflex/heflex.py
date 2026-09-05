@@ -6,10 +6,11 @@ from dataclasses import dataclass, field
 from typing import Callable, Coroutine, List, Optional, Iterable
 
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 
 from .component import Component
 from .default_page_layout import DefaultPageLayout, PageLayoutFunc
+from .sse import frame_item
 
 
 @dataclass
@@ -19,12 +20,16 @@ class Heflex:
 
     def route(self, path: str, methods: List[str] = ["GET"], **kwargs):
         def decorator(func: Callable[..., Component]):
-            if inspect.isgeneratorfunction(func) or inspect.isasyncgenfunction(func):
+            if inspect.isgeneratorfunction(func):
                 raise TypeError(
-                    f"Route '{path}' handler must not be a generator; heflex renders "
-                    "Component return values. Return a list of Components instead, "
-                    "or pass through a Response (e.g. StreamingResponse)."
+                    f"Route '{path}' handler must not be a sync generator; heflex "
+                    "renders Component return values. Return a list of Components, "
+                    "or pass through a Response (e.g. StreamingResponse). Use an "
+                    "async generator to stream SSE (text/event-stream)."
                 )
+            # Async generators are the first-class SSE path: each yielded
+            # Component/str/RawHTML/SSEEvent is framed as one SSE message.
+            is_sse = inspect.isasyncgenfunction(func)
             sig = inspect.signature(func)
             params = list(sig.parameters.values())
 
@@ -64,6 +69,15 @@ class Heflex:
                 if not has_request and "request" in call_kwargs:
                     del call_kwargs["request"]
 
+                if is_sse:
+
+                    async def sse_stream():
+                        agen = func(*args, **call_kwargs)
+                        async for item in agen:
+                            yield frame_item(item).encode()
+
+                    return StreamingResponse(sse_stream(), media_type="text/event-stream")
+
                 if inspect.iscoroutinefunction(func):
                     result = await func(*args, **call_kwargs)
                 else:
@@ -74,6 +88,23 @@ class Heflex:
                     return result
                 if isinstance(result, Component):
                     results: list[Component] = [result]
+                elif inspect.isasyncgen(result):
+                    # Returning an async generator object is equivalent to
+                    # being one; stream it as SSE.
+
+                    async def sse_stream_returned():
+                        async for item in result:
+                            yield frame_item(item).encode()
+
+                    return StreamingResponse(
+                        sse_stream_returned(), media_type="text/event-stream"
+                    )
+                elif inspect.isgenerator(result):
+                    raise ValueError(
+                        f"Route '{path}' returned a sync generator; heflex renders "
+                        "Component return values. Use an async generator to stream "
+                        "SSE (text/event-stream), or pass through a Response."
+                    )
                 else:
                     try:
                         items: Optional[list[object]] = list(result)
@@ -99,8 +130,13 @@ class Heflex:
                 # prepended here so browsers don't fall back to quirks mode.
                 return HTMLResponse(content=f"<!DOCTYPE html>\n{full_page.render()}")
 
-            if hasattr(htmx_handler, "__signature__"):
-                setattr(htmx_handler, "__signature__", sig.replace(parameters=params))
+            setattr(htmx_handler, "__signature__", sig.replace(parameters=params))
+            # functools.wraps links __wrapped__ back to the user function;
+            # FastAPI follows that chain and would route an async-generator
+            # handler through its native streaming path (calling htmx_handler
+            # without awaiting it). The explicit __signature__ above is all
+            # dependency resolution needs, so sever the link.
+            setattr(htmx_handler, "__wrapped__", None)
 
             self.app.api_route(path, methods=methods, **kwargs)(htmx_handler)
 

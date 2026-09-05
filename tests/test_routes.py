@@ -164,15 +164,16 @@ def test_sync_generator_handler_rejected_at_registration():
     def gen():
         yield Div("x")
 
-    with pytest.raises(TypeError, match=r"must not be a generator"):
+    with pytest.raises(TypeError, match=r"must not be a sync generator"):
         hx.route("/gen")(gen)
 
 
-def test_async_generator_handler_rejected_at_registration():
+def test_async_generator_handler_is_allowed_as_sse():
+    # Async generators are the first-class SSE path (see tests/test_sse.py);
+    # decoration must succeed.
     hx = Heflex(FastAPI(title="T"))
 
     async def agen():
         yield Div("x")
 
-    with pytest.raises(TypeError, match=r"must not be a generator"):
-        hx.route("/agen")(agen)
+    assert hx.route("/agen")(agen) is not None
