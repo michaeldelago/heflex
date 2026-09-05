@@ -1,5 +1,17 @@
-from fastapi import FastAPI, Request
-from heflex import Button, Component, Div, Heflex, Script
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.14"
+# dependencies = ["heflex", "uvicorn"]
+#
+# [tool.uv.sources]
+# heflex = { path = "../", editable = true }
+# ///
+
+
+import uvicorn
+from fastapi import FastAPI
+from heflex import Button, Component, Div, Heflex
 
 count_state = {"value": 0}
 
@@ -70,9 +82,12 @@ async def increment() -> Component:
 
 
 @hx.route("/counter/decrement", methods=["POST"])
-async def increment() -> Component:
+async def decrement() -> Component:
     count_state["value"] -= 1
     return await counter_view()
 
 
 app = hx.app
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,14 +1,54 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.14"
+# dependencies = ["heflex", "uvicorn"]
+#
+# [tool.uv.sources]
+# heflex = { path = "../", editable = true }
+# ///
 
-from typing import Annotated
 from pathlib import Path
-from fastapi import FastAPI, Request
+from typing import Annotated
+
+import uvicorn
+from fastapi import FastAPI
 from fastapi import Form as FastAPIForm
-from heflex import Button, Component, Div, Heflex, Script, Form, Input, Style
+from heflex import Component, Div, Form, Heflex, Input, Script, Style
 
 current_file_path = Path(__file__).resolve()
 
-sortable_js = current_file_path.parent / "htmx_example_sortable.js"
+sortable_js = """
+htmx.config.logAll = true;
+
+htmx.onLoad(function (content) {
+    var sortables = content.querySelectorAll(".sortable");
+    for (var i = 0; i < sortables.length; i++) {
+        var sortable = sortables[i];
+        var sortableInstance = new Sortable(sortable, {
+            animation: 150,
+            ghostClass: "blue-background-class",
+
+            // Make the `.htmx-indicator` unsortable
+            filter: ".htmx-indicator",
+            onMove: function (evt) {
+                return evt.related.className.indexOf("htmx-indicator") === -1;
+            },
+
+            // Disable sorting on the `end` event
+            onEnd: function (evt) {
+                this.option("disabled", true);
+            },
+        });
+
+        // Re-enable sorting on the `htmx:afterSwap` event
+        sortable.addEventListener("htmx:after:swap", function () {
+            console.log("enabled");
+            sortableInstance.option("disabled", false);
+        });
+    }
+});
+"""
 
 style = """
 .zz-sortable-item {
@@ -35,7 +75,7 @@ def page_layout(title: str, *args: Component):
             "",
             src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js",
         ),
-        Script(sortable_js.read_text()),
+        Script(sortable_js),
     )
 
 
@@ -78,3 +118,6 @@ async def items(item: Annotated[list[str], FastAPIForm()]):
 
 
 app = hx.app
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
