@@ -1,0 +1,22 @@
+[project]
+name = "heflex"
+version = "0.1.0"
+description = "A micro framework for writing beautiful HTMX applications"
+readme = "README.md"
+authors = [
+    { name = "Michael Delago", email = "michaeldelago98@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.141.1",
+    "python-multipart>=0.0.32",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.5,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "uvicorn>=0.52.4",
+]
