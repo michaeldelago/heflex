@@ -11,7 +11,7 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Button, Component, Div, Heflex
+from heflex import Button, Component, Div, Heflex, Style
 
 count_state = {"value": 0}
 
@@ -29,9 +29,18 @@ async def counter_view() -> Component:
             f"Count: {count_state['value']}",
             style={"max-width": "70%", "margin-left": "auto", "margin-right": "auto"},
         ),
+        Style(
+            """
+            #btn-inc { background-color: oklch(54.6% 0.245 262.881); }
+            #btn-inc:hover { background-color: oklch(48.8% 0.243 264.376); }
+            #btn-dec { background-color: oklch(57.7% 0.245 27.325); }
+            #btn-dec:hover { background-color: oklch(50.5% 0.213 27.518); }
+            """
+        ),
         Div(
             Button(
                 "Increment",
+                id="btn-inc",
                 hx_post="/counter/increment",
                 hx_target="#counter-wrapper",
                 hx_swap="outerMorph",
@@ -39,8 +48,6 @@ async def counter_view() -> Component:
                     "color": "white",
                     "padding-left": "1rem",
                     "padding-right": "1rem",
-                    "background-color": "oklch(54.6% 0.245 262.881)",
-                    "background-color:hover": "oklch(48.8% 0.243 264.376)",
                     "margin-left": "1rem",
                     "margin-right": "1rem",
                     "border-radius": "4px",
@@ -49,6 +56,7 @@ async def counter_view() -> Component:
             ),
             Button(
                 "Decrement",
+                id="btn-dec",
                 hx_post="/counter/decrement",
                 hx_target="#counter-wrapper",
                 hx_swap="outerMorph",
@@ -56,8 +64,6 @@ async def counter_view() -> Component:
                     "color": "white",
                     "padding-left": "1rem",
                     "padding-right": "1rem",
-                    "background-color": "oklch(57.7% 0.245 27.325)",
-                    "background-color:hover": "oklch(50.5% 0.213 27.518)",
                     "margin-left": "1rem",
                     "margin-right": "1rem",
                     "border-radius": "4px",
@@ -69,7 +75,7 @@ async def counter_view() -> Component:
         style={
             "padding": "2rem",
             "border-radius": "4px",
-            "box-shadow": "0 4px 8 px 0 rgba(0,0,0,0.6)",
+            "box-shadow": "0 4px 8px 0 rgba(0,0,0,0.6)",
             "display": "inline-block",
         },
     )
@@ -90,4 +96,4 @@ async def decrement() -> Component:
 app = hx.app
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, port=8000)

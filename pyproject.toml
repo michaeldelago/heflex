@@ -6,6 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Michael Delago", email = "michaeldelago98@gmail.com" }
 ]
+license = { text = "GPL-3.0-or-later" }
 requires-python = ">=3.14"
 dependencies = [
     "fastapi>=0.141.1",
@@ -18,5 +19,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "httpx2>=2.12.0",
+    "pytest>=9.1.1",
     "uvicorn>=0.52.4",
 ]

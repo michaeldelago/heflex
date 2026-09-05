@@ -28,12 +28,31 @@ async def home() -> Component:
 app = hx.app            # expose the underlying FastAPI app for uvicorn
 ```
 
+**Tip: make scripts directly runnable with a uv shebang.** The examples (`./example/counter.py`) start with:
+
+```python
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.14"
+# dependencies = ["heflex", "uvicorn"]
+#
+# [tool.uv.sources]
+# heflex = { path = "../", editable = true }
+# ///
+```
+
+This PEP 723 inline metadata lets `./example/counter.py` run itself — `uv` resolves and installs the deps on the fly (the `[tool.uv.sources]` entry points at this repo for a local editable copy). Copy the block into new app files to make them self-contained; drop the `sources` section when installing heflex from PyPI instead.
+
 ## Core API
 
-### `Heflex(app=None, page_layout=DefaultPageLayout)`
+### `Heflex(app=FastAPI(), page_layout=DefaultPageLayout)`
+
+Both parameters have defaults: `app` auto-creates a fresh `FastAPI()` when omitted (`hx = Heflex()` works), and `page_layout` is `DefaultPageLayout`.
 
 - `.route(path, methods=["GET"], **kwargs)` — decorator. Accepts sync or async handlers.
-- Handler return types: a single `Component`, a list/iterable of `Components` (rendered and concatenated), or any other FastAPI-compatible response (returned as-is, e.g. redirect).
+- Handler return types: a single `Component`, an iterable of `Components` (rendered and concatenated; empty is valid → empty fragment), or a Starlette/FastAPI `Response` instance (passed through as-is, e.g. `RedirectResponse`). Anything else raises `ValueError` server-side — heflex never silently JSON-encodes your return value.
+- **Handler functions must not be generators** (`def ...: yield`) — registering one raises `TypeError` at decoration time (FastAPI would misclassify it as a JSONL stream). Return a list, or pass through a `Response`/`StreamingResponse`.
 - **Request params are special-cased**: if the handler signature does not include a `request: Request` parameter, heflex injects one internally for HTMX detection but strips it from the call to your function. You can also declare `request: Request` yourself and use it normally (cookies, state, etc.).
 - **Form data**: use FastAPI's own param machinery — `Annotated[list[str], FastAPIForm()]`, plain scalars, etc. See `example/sortable.py`.
 
@@ -45,19 +64,20 @@ Div(*children, **kwargs)     Button(...)  Input(...)  Form(...)
 Script(content, **kwargs)    Style(css_text, **kwargs)       # text content is first positional arg
 ```
 
-- Children can be strings or nested Components. Plain strings are interpolated as-is (no escaping — build values from trusted/own data).
+- Children can be strings, nested Components, or `RawHTML`. String children are HTML-escaped by default; wrap pre-built HTML in `RawHTML(...)` to interpolate it verbatim. `Script`/`Style` content is always emitted raw (browsers parse those tags as raw text).
 - `Input`, and tags `img/br/hr/meta`, render self-closing: `Input(name="q", type="text")`.
 
 ### Attribute rules (gotchas!)
 
 - **snake_case kwargs become hyphenated HTML attrs**: `hx_post="/x"` → `hx-post="/x"`, `class_` → ... see below. So HTMX attrs are written as kwargs `hx_get`, `hx_post`, `hx_target`, `hx_swap`, `hx_trigger`.
 - **Trailing underscore** on a kwarg name is stripped: `class_="foo"` → `class="foo"`. (Needed for `class`.) There is no `for_` special-casing beyond this general rule, so write `for="id"` via `for_=`.
+- **Literal underscore escape**: to emit a real `_` at the end of an attribute name, double it: `data_foo__=...` renders `data-foo_=...`. All other underscores still become hyphens.
 - **Booleans** render as `attr="true"` or are omitted when `False` (HTMX v4 style). Never pass string `"true"`.
-- **`style` is a dict**, not a CSS string: `style={"margin": "1rem", "color": "red"}`. Keys/values are stripped and joined with `; `. The sortable example abuses this for pseudo-class keys (`"background-color:hover"`), which the renderer supports verbatim but plain browsers will ignore — prefer real `<Style>` blocks for selectors.
+- **`style` is a dict**, not a CSS string: `style={"margin": "1rem", "color": "red"}`. Keys/values are stripped and joined with `; `. Keys are emitted verbatim, so pseudo-class keys (e.g. `"background-color:hover"`) do reach the browser but are ignored as invalid inside `style=""` — use a real `<Style>` block with ids/classes for selectors.
 
 ### Page layout
 
-Signature: `Callable[[str, *Component], Component]` — receives `(title, *children)` and must return a `Component`. The title comes from `FastAPI`'s `title`. Default loads HTMX v4 from unpkg CDN (`htmx.org@4.0.0`) into `<head>` and wraps in a styled `<body>`.
+Signature: `Callable[[str, *Component], Component]` — receives `(title, *children)` and must return a `Component`. The title comes from `FastAPI`'s `title`. Heflex prepends `<!DOCTYPE html>` to the rendered layout (layouts start at `<html>`; HTMX fragments get no doctype). Default loads HTMX v4 from unpkg CDN (`htmx.org@4.0.0`) into `<head>` and wraps in a styled `<body>`.
 
 Custom layout (e.g. to add your own JS/CSS or SortableJS):
 

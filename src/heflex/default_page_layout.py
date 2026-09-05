@@ -1,8 +1,10 @@
-from typing import Callable, Iterable
+from typing import Callable, Unpack
 
-from heflex.component import Component
+from .component import Component
 
-PageLayoutFunc = Callable[[str, Component], Component]
+# A layout takes the app title followed by any number of page components:
+# layout(title, *children) -> Component
+PageLayoutFunc = Callable[[str, Unpack[tuple[Component, ...]]], Component]
 
 
 def DefaultPageLayout(title: str, *args: Component) -> Component:
