@@ -135,18 +135,22 @@ Persistent connections use `hx-sse:connect="/url"` on an element, closed by a na
 
 ## Examples
 
-The `example/` directory contains three runnable applications:
+Every file is self-contained (PEP 723 inline metadata): `uv run example/counter.py`.
 
 - `counter.py` — Counter using HTMX outerMorph swaps
 - `sortable.py` — Drag-and-drop sortable list using SortableJS
 - `ticker.py` — SSE: streamed text chunks and a persistent `hx-sse:connect` feed
 
-```bash
-cd example
-uv run counter.py
-uv run sortable.py
-uv run ticker.py
-```
+The remaining files are self-contained ports of the [htmx v4 pattern pages](https://four.htmx.org/patterns) (each cites its source URL in a header comment):
+
+| Category | Examples |
+| --- | --- |
+| Loading | `click_to_load.py`, `infinite_scroll.py`, `lazy_load.py`, `progress_bar.py` |
+| Forms | `active_search.py`, `active_validation.py`, `file_upload.py`, `linked_selects.py`, `reset_on_submit.py` |
+| Records | `bulk_actions.py`, `delete_in_place.py`, `drag_to_reorder.py`, `edit_in_place.py` |
+| Display | `tabs.py`, `dialogs.py` |
+| Streaming | `llm_streaming_response.py`, `live_updates.py`, `polling.py` |
+| Advanced | `keyboard_shortcuts.py` |
 
 ## License
 
