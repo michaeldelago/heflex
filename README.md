@@ -66,9 +66,11 @@ uv run uvicorn main:app --reload
 A `Component` represents an HTML element with a tag, children, and attributes:
 
 ```python
-from heflex import Div, Button, Input, Form, Script, Style, Component
+from heflex.component import Div, Button, Input, Form, H1, Table, Tr, Td, Span
+from heflex import Script, Style, RawHTML
 
 Div(
+    H1("Welcome"),
     Input(type="text", placeholder="Enter name"),
     Button("Submit", hx_post="/submit", hx_target="#result"),
     class_="card",
@@ -88,7 +90,25 @@ Attribute values and string children are HTML-escaped. Wrap pre-built HTML in
 `RawHTML(...)` to interpolate it verbatim; `Script`/`Style` content is always
 emitted raw (browsers parse those tags as raw text).
 
-Built-in helpers: `Div`, `Button`, `Input`, `Form`, `Script`, `Style`, `RawHTML`.
+#### Factory functions
+
+All [MDN HTML element tags](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements) are available as factory functions, imported from `heflex.component`. Each function returns a `Component` with the corresponding tag.
+
+**Root & structure:** `Html`, `Head`, `Body`, `Title`, `Meta`
+**Sectioning:** `Main`, `Header`, `Footer`, `Nav`, `Aside`, `Article`, `Section`, `H1`–`H6`, `Hgroup`, `Details`, `Summary`
+**Text:** `P`, `Blockquote`, `Pre`, `Code`, `Br`, `Hr`, `Div`, `Span`, `Em`, `Strong`, `Small`, `Mark`, `Abbr`, `Cite`, `Q`, `Dfn`, `Time`, `Data`, `Wbr`
+**Inline:** `A`, `Img`, `I`, `B`, `U`, `S`, `Sub`, `Sup`, `Kbd`, `Var`, `Samp`, `Del`, `Ins`, `Rp`, `Rt`, `Ruby`, `Bdi`, `Bdo`
+**Media:** `Picture`, `Source`, `Video`, `Audio`, `Canvas`, `Map`, `Area`, `Figcaption`, `Figure`
+**Embedded:** `Iframe`, `Embed`, `Object`, `Param`, `Svg`, `Math`
+**Forms:** `Form`, `Fieldset`, `Legend`, `Label`, `Input`, `Button`, `Select`, `Option`, `Optgroup`, `Textarea`, `Datalist`, `Output`, `Progress`, `Meter`
+**Tables:** `Table`, `Thead`, `Tbody`, `Tfoot`, `Tr`, `Th`, `Td`, `Caption`, `Col`, `Colgroup`
+**Interactive:** `Menu`, `Li`, `Ul`, `Ol`, `Dialog`
+**Web components:** `Slot`, `Template`
+
+The following are deprecated/obsolete and emit a `DeprecationWarning` at construction time:
+`Acronym`, `Applet`, `Basefont`, `Bgsound`, `Dir`, `Font`, `Frame`, `Frameset`, `Noframes`, `Isindex`, `Listing`, `Marquee`, `Multicol`, `Nextid`, `Strike`, `TT`, `Xmp`.
+
+Built-in helpers: `Script`, `Style`, `RawHTML`, `Component`.
 
 ### Route Decorator
 

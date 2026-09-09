@@ -59,10 +59,33 @@ Both parameters have defaults: `app` auto-creates a fresh `FastAPI()` when omitt
 ### Components (`heflex.component`)
 
 ```python
-Component("h1", "text", children_or_text..., **attributes)   # any tag
-Div(*children, **kwargs)     Button(...)  Input(...)  Form(...)
-Script(content, **kwargs)    Style(css_text, **kwargs)       # text content is first positional arg
+from heflex.component import Div, Button, H1, Table, Tr, Td, Span, Form, Input
+from heflex import Script, Style, RawHTML
+
+Div(
+    H1("Welcome"),
+    Input(type="text", placeholder="Enter name"),
+    Button("Submit", hx_post="/submit", hx_target="#result"),
+    class_="card",
+)
 ```
+
+`Component("tag", *children, **attrs)` works for any tag. All [MDN HTML element tags](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements) are also available as factory functions:
+
+**Root & structure:** `Html`, `Head`, `Body`, `Title`, `Meta`
+**Sectioning:** `Main`, `Header`, `Footer`, `Nav`, `Aside`, `Article`, `Section`, `H1`–`H6`, `Hgroup`, `Details`, `Summary`
+**Text:** `P`, `Blockquote`, `Pre`, `Code`, `Br`, `Hr`, `Div`, `Span`, `Em`, `Strong`, `Small`, `Mark`, `Abbr`, `Cite`, `Q`, `Dfn`, `Time`, `Data`, `Wbr`
+**Inline:** `A`, `Img`, `I`, `B`, `U`, `S`, `Sub`, `Sup`, `Kbd`, `Var`, `Samp`, `Del`, `Ins`, `Rp`, `Rt`, `Ruby`, `Bdi`, `Bdo`
+**Media:** `Picture`, `Source`, `Video`, `Audio`, `Canvas`, `Map`, `Area`, `Figcaption`, `Figure`
+**Embedded:** `Iframe`, `Embed`, `Object`, `Param`, `Svg`, `Math`
+**Forms:** `Form`, `Fieldset`, `Legend`, `Label`, `Input`, `Button`, `Select`, `Option`, `Optgroup`, `Textarea`, `Datalist`, `Output`, `Progress`, `Meter`
+**Tables:** `Table`, `Thead`, `Tbody`, `Tfoot`, `Tr`, `Th`, `Td`, `Caption`, `Col`, `Colgroup`
+**Interactive:** `Menu`, `Li`, `Ul`, `Ol`, `Dialog`
+**Web components:** `Slot`, `Template`
+
+Deprecated/obsolete tags (`Acronym`, `Applet`, `Basefont`, `Bgsound`, `Dir`, `Font`, `Frame`, `Frameset`, `Noframes`, `Isindex`, `Listing`, `Marquee`, `Multicol`, `Nextid`, `Strike`, `TT`, `Xmp`) are available from `heflex.component.deprecated` and emit `DeprecationWarning` at construction time.
+
+`Script(content, **kwargs)` and `Style(css_text, **kwargs)` take content as the first positional arg (text is emitted raw, not escaped). `RawHTML(...)` interpolates verbatim.
 
 - Children can be strings, nested Components, or `RawHTML`. String children are HTML-escaped by default; wrap pre-built HTML in `RawHTML(...)` to interpolate it verbatim. `Script`/`Style` content is always emitted raw (browsers parse those tags as raw text).
 - `Input`, and tags `img/br/hr/meta`, render self-closing: `Input(name="q", type="text")`.
