@@ -60,10 +60,16 @@ class Component:
         """
         Render one attribute; values are always HTML-escaped and booleans
         render as attr="true" (HTMX v4 spec) or are omitted when False.
+
+        Attributes whose names start with ``hx-on`` are not escaped — their
+        values contain JavaScript that must remain intact.
         """
         attr_name = self._render_attr_name(key)
         if isinstance(val, bool):
             return f'{attr_name}="true"' if val else ""
+        # hx-on:* attributes contain JavaScript — do not escape.
+        if attr_name.startswith("hx-on"):
+            return f'{attr_name}="{val}"'
         return f'{attr_name}="{_html.escape(str(val), quote=True)}"'
 
     def _render_child(self, child) -> str:
