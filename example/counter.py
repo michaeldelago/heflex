@@ -13,6 +13,8 @@ import uvicorn
 from fastapi import FastAPI
 from heflex import Button, Component, Div, Heflex, Style
 
+from heflex.component import H1
+
 count_state = {"value": 0}
 
 hx = Heflex(FastAPI(debug=True, title="Counter"))
@@ -24,8 +26,7 @@ async def counter_view() -> Component:
     Renders the counter element using HTMX v4 morphing.
     """
     return Div(
-        Component(
-            "h1",
+        H1(
             f"Count: {count_state['value']}",
             style={"max-width": "70%", "margin-left": "auto", "margin-right": "auto"},
         ),
