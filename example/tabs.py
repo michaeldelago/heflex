@@ -22,7 +22,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Query
-from heflex import Component, Div, Heflex, Style
+from heflex import Button, Component, Div, Heflex, Style
+from heflex.component import H1
 
 TABS: dict[str, str] = {
     "overview": "Overview content… A short description of the project.",
@@ -47,8 +48,7 @@ ARROW_JS = (
 
 def tab_strip(active: str) -> Component:
     buttons = [
-        Component(
-            "button",
+        Button(
             name,
             type="button",
             role="tab",
@@ -62,7 +62,7 @@ def tab_strip(active: str) -> Component:
         )
         for name in TABS
     ]
-    return Component("div", *buttons, role="tablist", **{"hx-on:keydown": ARROW_JS})
+    return Div(*buttons, role="tablist", **{"hx-on:keydown": ARROW_JS})
 
 
 def render_tab(name: str) -> list[Component]:
@@ -84,7 +84,7 @@ hx = Heflex(FastAPI(debug=True, title="Tabs"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Server-driven tabs"),
+        H1("Server-driven tabs"),
         # Empty container; hx-trigger=load fetches the first tab. It targets
         # itself and :inherited so every fetched strip's buttons target it too.
         Div(hx_get=f"/tab?name={DEFAULT_TAB}", hx_target="this", hx_swap="innerMorph", id="tabs-container"),

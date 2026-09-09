@@ -13,7 +13,8 @@ import asyncio
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Button, Component, Div, Heflex, SSEEvent
+from heflex import Button, Div, Heflex, SSEEvent
+from heflex.component import H2, Output
 
 hx = Heflex(FastAPI(debug=True, title="SSE Ticker"))
 
@@ -38,7 +39,7 @@ async def home():
                 hx_target="#output",
                 hx_swap="beforeend",
             ),
-            Component("output", id="output"),
+            Output(id="output")
         ),
         Div(
             Button("Connect", id="connect"),
@@ -47,7 +48,7 @@ async def home():
                 hx_swap="none",
                 **{"hx-sse:connect": "/ticker", "hx-sse:close": "done"},
             ),
-            Component("h2", "waiting to connect…", id="display"),
+            H2("waiting to connect…", id="display")
         ),
     )
 
@@ -64,7 +65,7 @@ async def greeting():
 async def ticker():
     """Persistent SSE connection: ticks, then a named event to close."""
     for i in range(1, 4):
-        yield Component("h2", f"tick {i}")
+        yield H2(f"tick {i}")
         await asyncio.sleep(0.8)
     yield SSEEvent(event="done", data="")
 

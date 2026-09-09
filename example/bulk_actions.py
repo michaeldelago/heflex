@@ -22,6 +22,7 @@
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
 from heflex import Component, Div, Heflex, Input, Style, Button
+from heflex.component import Form, H1, P, Table, Td, Th, Tr
 
 
 class User:
@@ -44,12 +45,11 @@ hx = Heflex(FastAPI(debug=True, title="Bulk Actions"))
 
 def full_table(flash: str | None) -> Component:
     rows = [
-        Component(
-            "tr",
+        Tr(
             Input(type="checkbox", **{"name": "selected", "value": u.email}),
-            Component("td", u.name),
-            Component("td", u.email),
-            Component("td", u.status.capitalize()),
+            Td(u.name),
+            Td(u.email),
+            Td(u.status.capitalize()),
             onclick=ROW_JS,
         )
         for u in USERS
@@ -60,18 +60,15 @@ def full_table(flash: str | None) -> Component:
         Button("Delete", type="button", hx_post="/bulk/delete", hx_target="#bulk", hx_swap="outerHTML"),
         class_="action-bar",
     )
-    return Component(
-        "form",
-        *( [Component("p", flash, class_="flash")] if flash else [] ),
+    return Form(
+        *([P(flash, class_="flash")] if flash else []),
         action_bar,
-        Component(
-            "table",
-            Component(
-                "tr",
+        Table(
+            Tr(
                 Input(type="checkbox", id="select-all", onclick='this.parentElement.parentElement.querySelectorAll("input[name=selected]").forEach(cb => cb.checked = this.checked)'),
-                Component("th", "Name"),
-                Component("th", "Email"),
-                Component("th", "Status"),
+                Th("Name"),
+                Th("Email"),
+                Th("Status"),
             ),
             *rows,
         ),
@@ -82,7 +79,7 @@ def full_table(flash: str | None) -> Component:
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Users"),
+        H1("Users"),
         full_table(None),
         Style(
             """

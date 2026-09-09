@@ -18,7 +18,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Query
-from heflex import Button, Component, Div, Heflex, Style
+from heflex import Button, Component, Div, Heflex
+from heflex.component import Strong
 
 PAGE_SIZE = 3
 TOTAL_COMMENTS = 12
@@ -28,7 +29,7 @@ comments = [f"Comment #{i}: {'x' * (i % 5 + 1)} — something said in reply." fo
 
 def render_comments(start: int, end: int) -> list[Component]:
     return [
-        Div(Component("strong", c), style={"border": "1px solid #ccc", "padding": "0.5rem", "margin-bottom": "0.5rem"})
+        Div(Strong(c), style={"border": "1px solid #ccc", "padding": "0.5rem", "margin-bottom": "0.5rem"})
         for c in comments[start:end]
     ]
 

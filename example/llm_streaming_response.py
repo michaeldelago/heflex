@@ -28,6 +28,7 @@ import asyncio
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
 from heflex import Button, Component, Div, Heflex, Input, RawHTML, Style
+from heflex.component import Fieldset, H1
 
 # One source of truth for in-flight generation; /clear cancels it server-side.
 GENERATION = {"active": False}
@@ -49,11 +50,10 @@ hx = Heflex(FastAPI(debug=True, title="LLM Streaming"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Ask the model"),
+        H1("Ask the model"),
         # Transcript is appended to (beforeend), and scroll keeps tokens in view.
         Div(id="transcript", style={"min-height": "8rem", "border": "1px solid #ccc", "padding": "0.75rem", "margin-bottom": "1rem", "max-height": "16rem", "overflow-y": "auto"}),
-        Component(
-            "fieldset",
+        Fieldset(
             Input(type="text", name="prompt", placeholder="Ask something…", style={"width": "24rem"}),
             Button("Ask", type="submit"),
         ),

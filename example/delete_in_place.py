@@ -22,7 +22,8 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Component, Div, Heflex, Style, Button
+from heflex import Button, Component, Div, Heflex, Style
+from heflex.component import H1, Table, Td, Th, Tr
 from starlette.responses import PlainTextResponse
 
 
@@ -39,11 +40,10 @@ USERS = [
 
 
 def row(u: User) -> Component:
-    return Component(
-        "tr",
-        Component("td", u.name),
-        Component("td", u.email),
-        Component("td", u.status.capitalize()),
+    return Tr(
+        Td(u.name),
+        Td(u.email),
+        Td(u.status.capitalize()),
         Button(
             "Delete",
             type="button",
@@ -61,10 +61,9 @@ hx = Heflex(FastAPI(debug=True, title="Delete in Place"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Users"),
-        Component(
-            "table",
-            Component("tr", *(Component("th", h) for h in ("Name", "Email", "Status", ""))),
+        H1("Users"),
+        Table(
+            Tr(*(Th(h) for h in ("Name", "Email", "Status", ""))),
             *(row(u) for u in USERS),
             style={"border-collapse": "collapse", "width": "100%"},
         ),

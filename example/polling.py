@@ -28,6 +28,7 @@ import random
 import uvicorn
 from fastapi import FastAPI
 from heflex import Button, Component, Div, Heflex, Style
+from heflex.component import H1
 
 STATE = {"running": True}
 
@@ -44,8 +45,7 @@ def poll_card() -> Component:
         # Filter: no traffic while the tab is hidden; interval keeps running.
         attrs["hx-trigger"] = "every 2s filter document.visibilityState === 'visible'"
     label = f"CPU {random.randint(5, 95)}%" if STATE["running"] else "Job complete (paused)"
-    return Component(
-        "div",
+    return Div(
         Div(label, style={"font-weight": "bold", "margin-bottom": "0.5rem"}),
         Button(
             "Pause" if STATE["running"] else "Resume",
@@ -64,7 +64,7 @@ hx = Heflex(FastAPI(debug=True, title="Polling"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Polling"),
+        H1("Polling"),
         poll_card(),
         Style("#poll-card { border: 1px solid #ccc; padding: 1rem; margin-bottom: 0.75rem; }"),
     )

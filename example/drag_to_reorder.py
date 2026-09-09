@@ -30,22 +30,20 @@ from heflex import (
     Script,
     Style,
 )
+from heflex.component import Body, Form, H1, Head, Html, Title
 
 ITEMS = ["Item 1", "Item 2", "Item 3", "Item 4"]
 
 
 def page(title: str, content: Component) -> Component:
     """DefaultPageLayout plus the Sortable.js CDN script."""
-    return Component(
-        "html",
-        Component(
-            "head",
-            Component("title", title),
+    return Html(
+        Head(
+            Title(title),
             Script("", src="https://unpkg.com/htmx.org@4.0.0/dist/htmx.min.js"),
             Script("", src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"),
         ),
-        Component(
-            "body",
+        Body(
             content,
             style={"padding": "4rem", "background-color": "oklch(98.5% 0.002 247.839)", "color": "oklch(21% 0.034 264.665)"},
         ),
@@ -66,9 +64,8 @@ hx = Heflex(FastAPI(debug=True, title="Drag to Reorder"), page_layout=page)
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Drag to reorder"),
-        Component(
-            "form",
+        H1("Drag to reorder"),
+        Form(
             Div("Updating...", class_="htmx-indicator", style={"display": "none"}),
             item_list(),
             hx_post="/items",

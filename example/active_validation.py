@@ -19,6 +19,7 @@
 import uvicorn
 from fastapi import FastAPI, Query
 from heflex import Component, Div, Heflex, Input, Style
+from heflex.component import H1, Label, Span
 
 TAKEN_USERNAMES = {"admin", "root", "venus"}
 
@@ -29,9 +30,8 @@ hx = Heflex(FastAPI(debug=True, title="Active Validation"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Sign Up"),
-        Component(
-            "label",
+        H1("Sign Up"),
+        Label(
             "Choose a username: ",
             Input(
                 type="text",
@@ -42,7 +42,7 @@ async def index() -> Component:
             ),
         ),
         # The "next span" target that receives validation messages.
-        Component("span"),
+        Span(),
         Style(".error { color: oklch(57.7% 0.245 27.325); } .ok { color: green; }"),
     )
 
@@ -52,12 +52,12 @@ async def check_username(username: str = Query("")) -> Component:
     """Validation message, or an empty span when the value is valid."""
     username = username.strip()
     if not username:
-        return Component("span")
+        return Span()
     if len(username) < 3:
-        return Component("span", "Too short (minimum 3 characters).", class_="error")
+        return Span("Too short (minimum 3 characters).", class_="error")
     if username.lower() in TAKEN_USERNAMES:
-        return Component("span", f"\"{username}\" is taken.", class_="error")
-    return Component("span", "Looks good!", class_="ok")
+        return Span(f"\"{username}\" is taken.", class_="error")
+    return Span("Looks good!", class_="ok")
 
 
 app = hx.app

@@ -24,12 +24,12 @@
 import uvicorn
 from fastapi import FastAPI
 from heflex import Button, Component, Div, Heflex, Style
+from heflex.component import Dialog, H1, H2, P, Table, Td, Th, Tr
 
 
 def modal() -> Component:
-    return Component(
-        "dialog",
-        Component("h2", "Report"),
+    return Dialog(
+        H2("Report"),
         # Loading state until the hx-get from the open button lands.
         Div("Loading…", id="modal-body"),
         Button("Close", type="button", command="close", style={"margin-top": "1rem"}),
@@ -44,7 +44,7 @@ hx = Heflex(FastAPI(debug=True, title="Dialogs"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Dialogs"),
+        H1("Dialogs"),
         Button(
             "Open a Modal",
             type="button",
@@ -67,12 +67,11 @@ async def index() -> Component:
 async def report() -> Component:
     """Content swapped into #modal-body once fetched."""
     return Div(
-        Component("p", "Here is your report:"),
-        Component(
-            "table",
-            Component("tr", *(Component("th", h) for h in ("Region", "Sales"))),
-            Component("tr", Component("td", "North"), Component("td", "$12,400")),
-            Component("tr", Component("td", "South"), Component("td", "$9,800")),
+        P("Here is your report:"),
+        Table(
+            Tr(*(Th(h) for h in ("Region", "Sales"))),
+            Tr(Td("North"), Td("$12,400")),
+            Tr(Td("South"), Td("$9,800")),
             style={"border-collapse": "collapse"},
         ),
     )

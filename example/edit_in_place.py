@@ -21,6 +21,7 @@
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
 from heflex import Button, Component, Div, Heflex, Input, Style
+from heflex.component import Form, H1, P, Strong
 
 
 class User:
@@ -34,8 +35,8 @@ USERS: dict[int, User] = {1: User(1, "Joe Smith", "joe@smith.org"), 2: User(2, "
 def view_card(u: User) -> Component:
     """View mode. The card targets itself so any inner request can replace it."""
     return Div(
-        Component("p", Component("strong", "Name:"), u.name),
-        Component("p", Component("strong", "Email:"), u.email),
+        P(Strong("Name:"), u.name),
+        P(Strong("Email:"), u.email),
         Button("Edit", type="button", hx_get=f"/users/{u.id_}/edit", hx_target=f"#card-{u.id_}", hx_swap="outerHTML"),
         id=f"card-{u.id_}",
         class_="card",
@@ -45,8 +46,7 @@ def view_card(u: User) -> Component:
 def edit_card(u: User) -> Component:
     """Edit mode: form pre-filled with the current values."""
     return Div(
-        Component(
-            "form",
+        Form(
             Input(type="text", name="name", value=u.name),
             Input(type="email", name="email", value=u.email),
             Button("Save", type="submit"),
@@ -66,7 +66,7 @@ hx = Heflex(FastAPI(debug=True, title="Edit in Place"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Users"),
+        H1("Users"),
         *(view_card(u) for u in USERS.values()),
         Style(".card { border: 1px solid #ccc; padding: 0.75rem; margin-bottom: 0.75rem; max-width: 24rem; background: white; }"),
     )

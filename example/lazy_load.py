@@ -21,7 +21,8 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Component, Div, Heflex, Style
+from heflex import Component, Div, Heflex
+from heflex.component import H1, H2, H3
 
 
 def placeholder(label: str, url: str) -> Div:
@@ -46,10 +47,10 @@ async def index() -> Component:
     parallel. Responses below contain no hx-trigger="load", so no loop.
     """
     return Div(
-        Component("h1", "Dashboard"),
+        H1("Dashboard"),
         placeholder("Loading weather", "/weather"),
         Div(
-            Component("h2", "Parallel sections"),
+            H2("Parallel sections"),
             placeholder("Loading sales", "/sales"),
             placeholder("Loading analytics", "/analytics"),
             placeholder("Loading notifications", "/notifications"),
@@ -61,7 +62,7 @@ async def index() -> Component:
 async def weather() -> Component:
     """Might query a database or call an external API."""
     return Div(
-        Component("h3", "5-Day Forecast"),
+        H3("5-Day Forecast"),
         *map(lambda i: Div(f"Weekday {i}: 7{2 - i}° Sunny", style={"padding": "0.1rem"}), range(1, 6)),
     )
 

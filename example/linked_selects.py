@@ -21,6 +21,7 @@
 import uvicorn
 from fastapi import FastAPI, Query
 from heflex import Component, Div, Heflex, Style
+from heflex.component import H1, Option, Select, Span
 
 CARS = {
     "Toyota": ["Corolla", "Camry", "RAV4"],
@@ -30,7 +31,7 @@ CARS = {
 
 
 def option(value: str) -> Component:
-    return Component("option", value, value=value)
+    return Option(value, value=value)
 
 
 hx = Heflex(FastAPI(debug=True, title="Linked Selects"))
@@ -39,18 +40,16 @@ hx = Heflex(FastAPI(debug=True, title="Linked Selects"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Cars"),
-        Component(
-            "select",
-            Component("option", "", value=""),
+        H1("Cars"),
+        Select(Option("", value=""),
             *(option(m) for m in CARS),
             name="make",
             hx_get="/models",
             hx_target="#models",
             hx_indicator="#models-indicator",
         ),
-        Component("span", "Loading...", id="models-indicator", class_="htmx-indicator"),
-        Component("select", Component("option", "", value=""), name="model", id="models"),
+        Span("Loading...", id="models-indicator", class_="htmx-indicator"),
+        Select(Option("", value=""), name="model", id="models"),
         Style(
             """
             .htmx-indicator { display: none; }

@@ -30,21 +30,17 @@ import random
 import uvicorn
 from fastapi import FastAPI
 from heflex import Component, Div, Heflex, Style
+from heflex.component import H1, Span, Table, Td, Tbody, Thead, Th, Tr
 
 SYMBOLS = {"HTMX": 142.10, "REST": 88.45, "FLEX": 17.62}
 
 
 def ticker_table() -> Component:
-    return Component(
-        "table",
-        Component("thead", Component("tr", Component("th", "Symbol"), Component("th", "Price"))),
-        Component(
-            "tbody",
+    return Table(
+        Thead(Tr(Th("Symbol"), Th("Price"))),
+        Tbody(
             *(
-                Component(
-                    "tr",
-                    Component("td", symbol),
-                    Component("td", f"{price:.2f}"),
+                Tr(Td(symbol), Td(f"{price:.2f}"),
                     id=f"row-{symbol}",
                 )
                 for symbol, price in SYMBOLS.items()
@@ -60,11 +56,9 @@ hx = Heflex(FastAPI(debug=True, title="Live Updates"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Live prices"),
+        H1("Live prices"),
         # Connection element: opens on load, badge lit for the whole stream.
-        Component(
-            "span",
-            "Live",
+        Span("Live",
             id="live-badge",
             class_="htmx-indicator",
             **{"hx-sse:connect": "/prices"},
@@ -85,10 +79,7 @@ async def prices() -> object:
     while True:
         symbol = random.choice(list(SYMBOLS))
         SYMBOLS[symbol] = max(0.01, SYMBOLS[symbol] + random.uniform(-2.5, 2.5))
-        yield Component(
-            "tr",
-            Component("td", symbol),
-            Component("td", f"{SYMBOLS[symbol]:.2f}"),
+        yield Tr(Td(symbol), Td(f"{SYMBOLS[symbol]:.2f}"),
             hx_swap_oob="true",
             id=f"row-{symbol}",
         )

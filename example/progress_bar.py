@@ -24,6 +24,7 @@ import uuid
 import uvicorn
 from fastapi import FastAPI, Query
 from heflex import Button, Component, Div, Heflex, Style
+from heflex.component import H1
 
 STEP = 0.15
 jobs: dict[str, float] = {}
@@ -32,8 +33,7 @@ jobs: dict[str, float] = {}
 def progress_container(job_id: str, p: float) -> Div:
     """The self-polling bar element (outerMorph morphs it in place each tick)."""
     return Div(
-        Component(
-            "div",
+        Div(
             style={
                 "height": "24px",
                 "background": "oklch(54.6% 0.245 262.881)",
@@ -64,7 +64,7 @@ hx = Heflex(FastAPI(debug=True, title="Progress Bar"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Background Job"),
+        H1("Background Job"),
         Button(
             "Start Job",
             hx_post="/job",

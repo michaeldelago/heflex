@@ -15,6 +15,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi import Form as FastAPIForm
 from heflex import Component, Div, Form, Heflex, Input, Script, Style
+from heflex.component import Body, Head, Html, Title
 
 current_file_path = Path(__file__).resolve()
 
@@ -62,15 +63,13 @@ style = """
 
 
 def page_layout(title: str, *args: Component):
-    return Component(
-        "html",
-        Component(
-            "head",
-            Component("title", title),
+    return Html(
+        Head(
+            Title(title),
             Script("", src="https://unpkg.com/htmx.org@4.0.0/dist/htmx.min.js"),
             Style(style),
         ),
-        Component("body", *args),
+        Body(*args),
         Script(
             "",
             src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js",

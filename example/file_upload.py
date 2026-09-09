@@ -22,14 +22,15 @@
 import uvicorn
 from fastapi import FastAPI, File, Form as FastAPIForm, UploadFile
 from heflex import Button, Component, Div, Form, Heflex, Input, Style
+from heflex.component import H1, P
 
 
 def upload_form(errors: str | None) -> Div:
     return Div(
         Form(
-            Component("p", "Title:"),
+            P("Title:"),
             Input(type="text", name="title"),
-            Component("p", "File:"),
+            P("File:"),
             Input(type="file", name="file", hx_preserve="this"),
             Button("Submit", type="submit"),
             hx_post="/upload",
@@ -37,7 +38,7 @@ def upload_form(errors: str | None) -> Div:
             hx_target="#result",
             hx_swap="innerHTML",
         ),
-        *( [Component("p", errors, class_="error")] if errors else [] ),
+        *( [P(errors, class_="error")] if errors else [] ),
     )
 
 
@@ -47,9 +48,9 @@ hx = Heflex(FastAPI(debug=True, title="File Upload"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Upload"),
+        H1("Upload"),
         upload_form(None),
-        Component("div", id="result", min_height="2rem"),
+        Div(id="result", min_height="2rem"),
         Style(".error { color: oklch(57.7% 0.245 27.325); } .ok { color: green; }"),
     )
 
@@ -63,8 +64,8 @@ async def upload(title: str = FastAPIForm(""), file: UploadFile | None = File(No
         return upload_form("A file is required.")
     data = await file.read()
     return Div(
-        Component("p", f"File uploaded successfully.", class_="ok"),
-        Component("p", f"{file.filename} ({len(data)} bytes) titled “{title.strip()}”."),
+        P("File uploaded successfully.", class_="ok"),
+        P(f"{file.filename} ({len(data)} bytes) titled “{title.strip()}”."),
     )
 
 

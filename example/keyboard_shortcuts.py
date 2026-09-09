@@ -23,7 +23,8 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Button, Component, Div, Heflex, Style
+from heflex import Button, Component, Div, Heflex
+from heflex.component import H1
 
 COUNT = {"done": 0}
 
@@ -36,7 +37,7 @@ hx = Heflex(FastAPI(debug=True, title="Keyboard Shortcuts"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Keyboard shortcuts"),
+        H1("Keyboard shortcuts"),
         Button(
             "Do It! (Alt+Shift+D)",
             type="button",

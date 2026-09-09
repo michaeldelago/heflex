@@ -21,6 +21,7 @@
 import uvicorn
 from fastapi import FastAPI, Query
 from heflex import Component, Div, Heflex, Input, Style
+from heflex.component import H1, Span, Table, Tbody, Td, Tr
 
 PEOPLE = [
     ("Venus Grimes", "venus.grimes@example.com"),
@@ -35,8 +36,8 @@ def result_rows(q: str) -> list[Component]:
     q = q.strip().lower()
     matches = [(name, email) for name, email in PEOPLE if q == "" or q in name.lower() or q in email.lower()]
     if not matches:
-        return [Component("tr", Component("td", "No matches.", **{"colspan": 2}))]
-    return [Component("tr", Component("td", name), Component("td", email)) for name, email in matches]
+        return [Tr(Td("No matches.", **{"colspan": 2}))]
+    return [Tr(Td(name), Td(email)) for name, email in matches]
 
 
 hx = Heflex(FastAPI(debug=True, title="Active Search"))
@@ -45,7 +46,7 @@ hx = Heflex(FastAPI(debug=True, title="Active Search"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "People"),
+        H1("People"),
         Input(
             type="search",
             name="q",
@@ -55,10 +56,9 @@ async def index() -> Component:
             hx_target="#results",
             hx_indicator="#loading",
         ),
-        Component("span", "Searching...", id="loading", class_="htmx-indicator"),
-        Component(
-            "table",
-            Component("tbody", id="results"),
+        Span("Searching...", id="loading", class_="htmx-indicator"),
+        Table(
+            Tbody(id="results"),
             style={"border-collapse": "collapse"},
         ),
         Style(

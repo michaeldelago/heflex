@@ -20,7 +20,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
-from heflex import Button, Component, Div, Form, Heflex, Input, Style
+from heflex import Button, Component, Div, Form, Heflex, Input
+from heflex.component import H1
 
 
 def bubble(text: str, sender: str) -> Component:
@@ -46,7 +47,7 @@ hx = Heflex(FastAPI(debug=True, title="Reset on Submit"))
 @hx.route("/", methods=["GET"])
 async def index() -> Component:
     return Div(
-        Component("h1", "Chat"),
+        H1("Chat"),
         Div(
             bubble("Hi! How can I help?", "bot"),
             id="messages",
