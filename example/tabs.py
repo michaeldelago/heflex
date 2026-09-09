@@ -91,6 +91,7 @@ async def index() -> Component:
             hx_get=f"/tab?name={DEFAULT_TAB}",
             hx_target="this",
             hx_swap="innerMorph",
+            hx_trigger="load",
             id="tabs-container",
         ),
         Style(
