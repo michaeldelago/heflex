@@ -22,8 +22,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Query
-from heflex import Button, Component, Div, Heflex, Style
-from heflex.component import H1
+from heflex.component import Button, Component, Div, H1, Style
+from heflex import Heflex
 
 TABS: dict[str, str] = {
     "overview": "Overview content… A short description of the project.",

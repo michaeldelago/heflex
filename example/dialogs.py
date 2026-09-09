@@ -23,8 +23,8 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Button, Component, Div, Heflex, Style
-from heflex.component import Dialog, H1, H2, P, Table, Td, Th, Tr
+from heflex.component import Button, Component, Dialog, Div, H1, H2, P, Style, Table, Td, Th, Tr
+from heflex import Heflex
 
 
 def modal() -> Component:

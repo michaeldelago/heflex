@@ -29,7 +29,8 @@ Requires Python 3.14+. Dependencies: `fastapi`, `python-multipart`. The files in
 ## Quick Start
 
 ```python
-from heflex import Heflex, Div, Button, Component
+from heflex import Heflex
+from heflex.component import Div, Button, Component
 
 hx = Heflex()
 count = 0
@@ -66,8 +67,7 @@ uv run uvicorn main:app --reload
 A `Component` represents an HTML element with a tag, children, and attributes:
 
 ```python
-from heflex.component import Div, Button, Input, Form, H1, Table, Tr, Td, Span
-from heflex import Script, Style, RawHTML
+from heflex.component import Div, Button, Input, Form, H1, Table, Tr, Td, Span, Script, Style, RawHTML
 
 Div(
     H1("Welcome"),

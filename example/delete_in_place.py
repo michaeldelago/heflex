@@ -22,8 +22,8 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Button, Component, Div, Heflex, Style
-from heflex.component import H1, Table, Td, Th, Tr
+from heflex.component import Button, Component, Div, H1, Style, Table, Td, Th, Tr
+from heflex import Heflex
 from starlette.responses import PlainTextResponse
 
 

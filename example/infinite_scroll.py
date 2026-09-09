@@ -21,8 +21,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Query
-from heflex import Component, Div, Heflex, Style
-from heflex.component import H1, Table, Td, Th, Tr
+from heflex.component import Component, Div, H1, Style, Table, Td, Th, Tr
+from heflex import Heflex
 
 PAGE_SIZE = 3
 TOTAL_CONTACTS = 15

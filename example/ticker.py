@@ -13,8 +13,8 @@ import asyncio
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Button, Div, Heflex, SSEEvent
-from heflex.component import H2, Output
+from heflex.component import Button, Div, H2, Output
+from heflex import Heflex, SSEEvent
 
 hx = Heflex(FastAPI(debug=True, title="SSE Ticker"))
 

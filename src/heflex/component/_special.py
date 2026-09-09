@@ -1,6 +1,6 @@
 """Special elements with unique behavior."""
 
-from ._helper import Component, RawHTML
+from ._helper import Component
 
 # Tags whose text content browsers parse as raw text (no entity decoding).
 _RAW_CONTENT_TAGS = {"script", "style"}

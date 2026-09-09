@@ -17,7 +17,8 @@ App skeleton:
 
 ```python
 from fastapi import FastAPI
-from heflex import Heflex, Component, Div, Button
+from heflex import Heflex
+from heflex.component import Div, Button
 
 hx = Heflex(FastAPI(title="My App", debug=True))
 
@@ -59,8 +60,7 @@ Both parameters have defaults: `app` auto-creates a fresh `FastAPI()` when omitt
 ### Components (`heflex.component`)
 
 ```python
-from heflex.component import Div, Button, H1, Table, Tr, Td, Span, Form, Input
-from heflex import Script, Style, RawHTML
+from heflex.component import Div, Button, H1, Table, Tr, Td, Span, Form, Input, Script, Style, RawHTML
 
 Div(
     H1("Welcome"),

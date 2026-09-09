@@ -6,7 +6,7 @@ These are the building blocks that every element factory function returns.
 
 import html as _html
 from dataclasses import dataclass
-from typing import Any, Mapping, Iterable
+from typing import Any, Mapping
 
 # Tags whose text content browsers parse as raw text (no entity decoding).
 _RAW_CONTENT_TAGS = {"script", "style"}

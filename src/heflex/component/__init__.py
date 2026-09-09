@@ -60,10 +60,11 @@ from ._interactive import Details, Dialog, Summary
 from ._webcomponents import Slot, Template
 
 # Special handling
-from ._special import RawHTML, Component, Script, Style
+from ._helper import Component, RawHTML
+from ._special import Script, Style
 
 # Deprecated / obsolete elements
-from . import deprecated
+from . import deprecated  # noqa: F401
 
 __all__ = [
     # Root

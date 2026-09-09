@@ -10,7 +10,7 @@ They are provided for backward compatibility with legacy content.
 """
 
 import warnings
-from typing import Any
+
 
 from ._helper import Component
 

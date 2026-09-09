@@ -27,8 +27,8 @@ import asyncio
 
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
-from heflex import Button, Component, Div, Heflex, Input, RawHTML, Style
-from heflex.component import Fieldset, H1
+from heflex.component import Button, Component, Div, Fieldset, H1, Input, RawHTML, Style
+from heflex import Heflex
 
 # One source of truth for in-flight generation; /clear cancels it server-side.
 GENERATION = {"active": False}

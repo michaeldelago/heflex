@@ -21,16 +21,20 @@
 
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
-from heflex import (
+from heflex.component import (
+    Body,
     Component,
-    DefaultPageLayout,  # noqa: F401  (not used — custom layout below loads Sortable.js too)
     Div,
-    Heflex,
+    Form,
+    H1,
+    Head,
+    Html,
     Input,
     Script,
     Style,
+    Title,
 )
-from heflex.component import Body, Form, H1, Head, Html, Title
+from heflex import Heflex
 
 ITEMS = ["Item 1", "Item 2", "Item 3", "Item 4"]
 

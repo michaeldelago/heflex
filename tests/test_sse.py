@@ -2,7 +2,8 @@ import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
-from heflex import Button, Component, Div, Heflex, SSEEvent
+from heflex.component import Button, Component, Div
+from heflex import Heflex, SSEEvent
 
 
 def make_sse_app() -> Heflex:

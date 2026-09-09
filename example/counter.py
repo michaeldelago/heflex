@@ -11,9 +11,8 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Button, Component, Div, Heflex, Style
-
-from heflex.component import H1
+from heflex.component import Button, Component, Div, H1, Style
+from heflex import Heflex
 
 count_state = {"value": 0}
 

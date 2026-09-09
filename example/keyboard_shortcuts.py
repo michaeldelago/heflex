@@ -23,8 +23,8 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Button, Component, Div, Heflex
-from heflex.component import H1
+from heflex.component import Button, Component, Div, H1
+from heflex import Heflex
 
 COUNT = {"done": 0}
 

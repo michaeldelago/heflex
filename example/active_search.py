@@ -20,8 +20,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Query
-from heflex import Component, Div, Heflex, Input, Style
-from heflex.component import H1, Span, Table, Tbody, Td, Tr
+from heflex.component import Component, Div, H1, Input, Span, Style, Table, Tbody, Td, Tr
+from heflex import Heflex
 
 PEOPLE = [
     ("Venus Grimes", "venus.grimes@example.com"),

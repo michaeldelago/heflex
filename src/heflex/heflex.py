@@ -3,7 +3,7 @@
 import functools
 import inspect
 from dataclasses import dataclass, field
-from typing import Callable, Coroutine, List, Optional, Iterable
+from typing import Callable, List, Optional
 
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import HTMLResponse, StreamingResponse

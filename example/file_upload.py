@@ -21,8 +21,8 @@
 
 import uvicorn
 from fastapi import FastAPI, File, Form as FastAPIForm, UploadFile
-from heflex import Button, Component, Div, Form, Heflex, Input, Style
-from heflex.component import H1, P
+from heflex.component import Button, Component, Div, Form, H1, Input, P, Style
+from heflex import Heflex
 
 
 def upload_form(errors: str | None) -> Div:

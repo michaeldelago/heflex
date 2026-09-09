@@ -21,8 +21,8 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Component, Div, Heflex
-from heflex.component import H1, H2, H3
+from heflex.component import Component, Div, H1, H2, H3
+from heflex import Heflex
 
 
 def placeholder(label: str, url: str) -> Div:

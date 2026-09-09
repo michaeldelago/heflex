@@ -18,8 +18,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Query
-from heflex import Component, Div, Heflex, Input, Style
-from heflex.component import H1, Label, Span
+from heflex.component import Component, Div, H1, Input, Label, Span, Style
+from heflex import Heflex
 
 TAKEN_USERNAMES = {"admin", "root", "venus"}
 

@@ -18,8 +18,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Query
-from heflex import Button, Component, Div, Heflex
-from heflex.component import Strong
+from heflex.component import Button, Component, Div, Strong
+from heflex import Heflex
 
 PAGE_SIZE = 3
 TOTAL_COMMENTS = 12

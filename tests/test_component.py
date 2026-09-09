@@ -1,4 +1,4 @@
-from heflex import (
+from heflex.component import (
     Button,
     Component,
     Div,

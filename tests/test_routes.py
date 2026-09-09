@@ -3,7 +3,8 @@ from fastapi import FastAPI, Query, Request
 from fastapi.responses import RedirectResponse
 from starlette.testclient import TestClient
 
-from heflex import Button, Component, Div, Heflex
+from heflex.component import Button, Component, Div
+from heflex import Heflex
 
 
 def make_app():

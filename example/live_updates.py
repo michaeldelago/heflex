@@ -29,8 +29,8 @@ import random
 
 import uvicorn
 from fastapi import FastAPI
-from heflex import Component, Div, Heflex, Style
-from heflex.component import H1, Span, Table, Td, Tbody, Thead, Th, Tr
+from heflex.component import Component, Div, H1, Span, Style, Table, Tbody, Th, Td, Thead, Tr
+from heflex import Heflex
 
 SYMBOLS = {"HTMX": 142.10, "REST": 88.45, "FLEX": 17.62}
 

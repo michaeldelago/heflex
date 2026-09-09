@@ -20,8 +20,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
-from heflex import Button, Component, Div, Heflex, Input, Style
-from heflex.component import Form, H1, P, Strong
+from heflex.component import Button, Component, Div, Form, H1, Input, P, Strong, Style
+from heflex import Heflex
 
 
 class User:

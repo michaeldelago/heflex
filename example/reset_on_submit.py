@@ -20,8 +20,8 @@
 
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
-from heflex import Button, Component, Div, Form, Heflex, Input
-from heflex.component import H1
+from heflex.component import Button, Component, Div, Form, H1, Input
+from heflex import Heflex
 
 
 def bubble(text: str, sender: str) -> Component:
