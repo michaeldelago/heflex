@@ -68,7 +68,7 @@ def Em(*children, **kwargs) -> Component:
     return Component("em", *children, **kwargs)
 
 
-def I(*children, **kwargs) -> Component:
+def I(*children, **kwargs) -> Component:  # noqa: E743
     """Factory for the <i> element."""
     return Component("i", *children, **kwargs)
 
