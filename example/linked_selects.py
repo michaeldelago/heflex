@@ -41,7 +41,8 @@ hx = Heflex(FastAPI(debug=True, title="Linked Selects"))
 async def index() -> Component:
     return Div(
         H1("Cars"),
-        Select(Option("", value=""),
+        Select(
+            Option("", value=""),
             *(option(m) for m in CARS),
             name="make",
             hx_get="/models",

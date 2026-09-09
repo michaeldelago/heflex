@@ -21,7 +21,20 @@
 
 import uvicorn
 from fastapi import FastAPI, Form as FastAPIForm
-from heflex.component import Button, Component, Div, Form, H1, Input, P, Style, Table, Td, Th, Tr
+from heflex.component import (
+    Button,
+    Component,
+    Div,
+    Form,
+    H1,
+    Input,
+    P,
+    Style,
+    Table,
+    Td,
+    Th,
+    Tr,
+)
 from heflex import Heflex
 
 
@@ -37,7 +50,7 @@ USERS = [
 ]
 
 # Single quotes so the attribute value survives heflex's HTML escaping intact:
-ROW_JS = "if (event.target.tagName !== \"INPUT\") this.querySelector(\"input\").click();"
+ROW_JS = 'if (event.target.tagName !== "INPUT") this.querySelector("input").click();'
 
 
 hx = Heflex(FastAPI(debug=True, title="Bulk Actions"))
@@ -55,9 +68,27 @@ def full_table(flash: str | None) -> Component:
         for u in USERS
     ]
     action_bar = Div(
-        Button("Activate", type="button", hx_post="/bulk/activate", hx_target="#bulk", hx_swap="outerHTML"),
-        Button("Deactivate", type="button", hx_post="/bulk/deactivate", hx_target="#bulk", hx_swap="outerHTML"),
-        Button("Delete", type="button", hx_post="/bulk/delete", hx_target="#bulk", hx_swap="outerHTML"),
+        Button(
+            "Activate",
+            type="button",
+            hx_post="/bulk/activate",
+            hx_target="#bulk",
+            hx_swap="outerHTML",
+        ),
+        Button(
+            "Deactivate",
+            type="button",
+            hx_post="/bulk/deactivate",
+            hx_target="#bulk",
+            hx_swap="outerHTML",
+        ),
+        Button(
+            "Delete",
+            type="button",
+            hx_post="/bulk/delete",
+            hx_target="#bulk",
+            hx_swap="outerHTML",
+        ),
         class_="action-bar",
     )
     return Form(
@@ -65,7 +96,11 @@ def full_table(flash: str | None) -> Component:
         action_bar,
         Table(
             Tr(
-                Input(type="checkbox", id="select-all", onclick='this.parentElement.parentElement.querySelectorAll("input[name=selected]").forEach(cb => cb.checked = this.checked)'),
+                Input(
+                    type="checkbox",
+                    id="select-all",
+                    onclick='this.parentElement.parentElement.querySelectorAll("input[name=selected]").forEach(cb => cb.checked = this.checked)',
+                ),
                 Th("Name"),
                 Th("Email"),
                 Th("Status"),

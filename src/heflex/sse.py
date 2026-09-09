@@ -33,9 +33,7 @@ class SSEEvent:
     retry: int | None = None
 
     def frame(self) -> str:
-        if self.event is not None and (
-            "\n" in self.event or " " in self.event
-        ):
+        if self.event is not None and ("\n" in self.event or " " in self.event):
             raise ValueError("SSE event names must not contain spaces or newlines")
         parts: list[str] = []
         if self.event is not None:

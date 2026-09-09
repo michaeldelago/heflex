@@ -56,7 +56,7 @@ async def check_username(username: str = Query("")) -> Component:
     if len(username) < 3:
         return Span("Too short (minimum 3 characters).", class_="error")
     if username.lower() in TAKEN_USERNAMES:
-        return Span(f"\"{username}\" is taken.", class_="error")
+        return Span(f'"{username}" is taken.', class_="error")
     return Span("Looks good!", class_="ok")
 
 

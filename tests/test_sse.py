@@ -56,7 +56,7 @@ def test_async_generator_handler_streams_sse():
     # newline-safe framing of the text payload
     assert "data: a\ndata: b\n\n" in body
     # components render to HTML inside unnamed events
-    assert 'data: <p>chunk</p>\n\n' in body
+    assert "data: <p>chunk</p>\n\n" in body
     # named event for hx-sse:close / DOM dispatch
     assert "event: done\ndata:\n\n" in body
 
@@ -66,7 +66,7 @@ def test_returned_async_generator_object_streams_sse():
     with c.stream("GET", "/returned-agen") as r:
         assert r.headers["content-type"].startswith("text/event-stream")
         body = "".join(r.iter_text())
-    assert 'data: <div>hi</div>\n\n' in body
+    assert "data: <div>hi</div>\n\n" in body
 
 
 def test_yielding_non_component_raises_type_error():

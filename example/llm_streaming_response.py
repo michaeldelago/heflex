@@ -52,13 +52,34 @@ async def index() -> Component:
     return Div(
         H1("Ask the model"),
         # Transcript is appended to (beforeend), and scroll keeps tokens in view.
-        Div(id="transcript", style={"min-height": "8rem", "border": "1px solid #ccc", "padding": "0.75rem", "margin-bottom": "1rem", "max-height": "16rem", "overflow-y": "auto"}),
+        Div(
+            id="transcript",
+            style={
+                "min-height": "8rem",
+                "border": "1px solid #ccc",
+                "padding": "0.75rem",
+                "margin-bottom": "1rem",
+                "max-height": "16rem",
+                "overflow-y": "auto",
+            },
+        ),
         Fieldset(
-            Input(type="text", name="prompt", placeholder="Ask something…", style={"width": "24rem"}),
+            Input(
+                type="text",
+                name="prompt",
+                placeholder="Ask something…",
+                style={"width": "24rem"},
+            ),
             Button("Ask", type="submit"),
         ),
         Div(
-            Button("Clear", type="button", hx_post="/clear", hx_target="#transcript", hx_swap="innerHTML"),
+            Button(
+                "Clear",
+                type="button",
+                hx_post="/clear",
+                hx_target="#transcript",
+                hx_swap="innerHTML",
+            ),
             style={"margin-top": "0.75rem"},
         ),
         Style(".question { font-weight: bold; margin-bottom: 0.5rem; }"),

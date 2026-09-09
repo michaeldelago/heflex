@@ -23,7 +23,20 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex.component import Button, Component, Dialog, Div, H1, H2, P, Style, Table, Td, Th, Tr
+from heflex.component import (
+    Button,
+    Component,
+    Dialog,
+    Div,
+    H1,
+    H2,
+    P,
+    Style,
+    Table,
+    Td,
+    Th,
+    Tr,
+)
 from heflex import Heflex
 
 

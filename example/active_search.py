@@ -20,7 +20,18 @@
 
 import uvicorn
 from fastapi import FastAPI, Query
-from heflex.component import Component, Div, H1, Input, Span, Style, Table, Tbody, Td, Tr
+from heflex.component import (
+    Component,
+    Div,
+    H1,
+    Input,
+    Span,
+    Style,
+    Table,
+    Tbody,
+    Td,
+    Tr,
+)
 from heflex import Heflex
 
 PEOPLE = [
@@ -34,7 +45,11 @@ PEOPLE = [
 def result_rows(q: str) -> list[Component]:
     """Matching rows; the response is swapped into the #results tbody."""
     q = q.strip().lower()
-    matches = [(name, email) for name, email in PEOPLE if q == "" or q in name.lower() or q in email.lower()]
+    matches = [
+        (name, email)
+        for name, email in PEOPLE
+        if q == "" or q in name.lower() or q in email.lower()
+    ]
     if not matches:
         return [Tr(Td("No matches.", **{"colspan": 2}))]
     return [Tr(Td(name), Td(email)) for name, email in matches]

@@ -29,17 +29,19 @@ TOTAL_CONTACTS = 15
 
 
 def contact_rows(start: int, end: int) -> list[Component]:
-    return [
-        Tr(Td(f"Agent #{i}"), Td(f"agent{i}@smith.org"))
-        for i in range(start, end)
-    ]
+    return [Tr(Td(f"Agent #{i}"), Td(f"agent{i}@smith.org")) for i in range(start, end)]
 
 
 def loading_row(page: int) -> Component:
     """Self-replacing placeholder row that triggers the next fetch."""
     return Tr(
         Td(
-            Div("Loading more...", hx_get=f"/contacts?page={page}", hx_trigger="revealed", hx_swap="outerHTML"),
+            Div(
+                "Loading more...",
+                hx_get=f"/contacts?page={page}",
+                hx_trigger="revealed",
+                hx_swap="outerHTML",
+            ),
             style={"color": "#888"},
             **{"colspan": 2},
         ),
@@ -67,7 +69,9 @@ async def index() -> Component:
     return Div(
         H1("Contacts"),
         render_table(contact_rows(0, PAGE_SIZE), tail_page=2),
-        Style("#contacts-table td, #contacts-table th { border: 1px solid #ccc; padding: 0.4rem; }"),
+        Style(
+            "#contacts-table td, #contacts-table th { border: 1px solid #ccc; padding: 0.4rem; }"
+        ),
     )
 
 

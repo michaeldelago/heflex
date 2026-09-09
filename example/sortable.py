@@ -14,7 +14,18 @@ from typing import Annotated
 import uvicorn
 from fastapi import FastAPI
 from fastapi import Form as FastAPIForm
-from heflex.component import Body, Component, Div, Form, Head, Html, Input, Script, Style, Title
+from heflex.component import (
+    Body,
+    Component,
+    Div,
+    Form,
+    Head,
+    Html,
+    Input,
+    Script,
+    Style,
+    Title,
+)
 from heflex import Heflex
 
 current_file_path = Path(__file__).resolve()

@@ -39,7 +39,7 @@ async def home():
                 hx_target="#output",
                 hx_swap="beforeend",
             ),
-            Output(id="output")
+            Output(id="output"),
         ),
         Div(
             Button("Connect", id="connect"),
@@ -48,7 +48,7 @@ async def home():
                 hx_swap="none",
                 **{"hx-sse:connect": "/ticker", "hx-sse:close": "done"},
             ),
-            H2("waiting to connect…", id="display")
+            H2("waiting to connect…", id="display"),
         ),
     )
 

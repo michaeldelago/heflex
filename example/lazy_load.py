@@ -33,7 +33,11 @@ def placeholder(label: str, url: str) -> Div:
         hx_trigger="load",
         hx_swap="innerHTML",
         min_height="3rem",
-        style={"border": "1px dashed #ccc", "padding": "0.75rem", "margin-bottom": "1rem"},
+        style={
+            "border": "1px dashed #ccc",
+            "padding": "0.75rem",
+            "margin-bottom": "1rem",
+        },
     )
 
 
@@ -63,7 +67,10 @@ async def weather() -> Component:
     """Might query a database or call an external API."""
     return Div(
         H3("5-Day Forecast"),
-        *map(lambda i: Div(f"Weekday {i}: 7{2 - i}° Sunny", style={"padding": "0.1rem"}), range(1, 6)),
+        *map(
+            lambda i: Div(f"Weekday {i}: 7{2 - i}° Sunny", style={"padding": "0.1rem"}),
+            range(1, 6),
+        ),
     )
 
 

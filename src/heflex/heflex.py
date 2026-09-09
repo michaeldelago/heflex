@@ -76,7 +76,9 @@ class Heflex:
                         async for item in agen:
                             yield frame_item(item).encode()
 
-                    return StreamingResponse(sse_stream(), media_type="text/event-stream")
+                    return StreamingResponse(
+                        sse_stream(), media_type="text/event-stream"
+                    )
 
                 if inspect.iscoroutinefunction(func):
                     result = await func(*args, **call_kwargs)

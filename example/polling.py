@@ -38,13 +38,19 @@ def poll_card() -> Component:
     attrs: dict[str, object] = {
         "id": "poll-card",
         "hx-swap": "outerMorph",
-        "style": {"border": "1px solid #ccc", "padding": "1rem", "margin-bottom": "0.75rem"},
+        "style": {
+            "border": "1px solid #ccc",
+            "padding": "1rem",
+            "margin-bottom": "0.75rem",
+        },
     }
     if STATE["running"]:
         attrs["hx-get"] = "/cpu"
         # Filter: no traffic while the tab is hidden; interval keeps running.
         attrs["hx-trigger"] = "every 2s filter document.visibilityState === 'visible'"
-    label = f"CPU {random.randint(5, 95)}%" if STATE["running"] else "Job complete (paused)"
+    label = (
+        f"CPU {random.randint(5, 95)}%" if STATE["running"] else "Job complete (paused)"
+    )
     return Div(
         Div(label, style={"font-weight": "bold", "margin-bottom": "0.5rem"}),
         Button(
@@ -66,7 +72,9 @@ async def index() -> Component:
     return Div(
         H1("Polling"),
         poll_card(),
-        Style("#poll-card { border: 1px solid #ccc; padding: 1rem; margin-bottom: 0.75rem; }"),
+        Style(
+            "#poll-card { border: 1px solid #ccc; padding: 1rem; margin-bottom: 0.75rem; }"
+        ),
     )
 
 

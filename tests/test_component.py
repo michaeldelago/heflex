@@ -15,9 +15,7 @@ def test_basic_tag_and_text_child():
 
 
 def test_nested_components():
-    assert (
-        Div(Button("go")).render() == "<div><button>go</button></div>"
-    )
+    assert Div(Button("go")).render() == "<div><button>go</button></div>"
 
 
 def test_multiple_children():
@@ -25,10 +23,7 @@ def test_multiple_children():
 
 
 def test_snake_case_attributes_become_hyphenated():
-    assert (
-        Button("x", hx_get="/path").render()
-        == '<button hx-get="/path">x</button>'
-    )
+    assert Button("x", hx_get="/path").render() == '<button hx-get="/path">x</button>'
     out = Div("x", hx_post="/items", hx_target="#wrap", hx_swap="outerMorph")
     html = out.render()
     assert 'hx-post="/items"' in html
@@ -37,9 +32,7 @@ def test_snake_case_attributes_become_hyphenated():
 
 
 def test_trailing_underscore_stripped():
-    assert (
-        Div("x", class_="foo bar").render() == '<div class="foo bar">x</div>'
-    )
+    assert Div("x", class_="foo bar").render() == '<div class="foo bar">x</div>'
 
 
 def test_doubled_trailing_underscore_escapes_literal_underscore():
@@ -73,7 +66,7 @@ def test_style_value_escaped_in_attribute():
 
 
 def test_text_children_escaped_by_default():
-    out = Div('<img src=x onerror=alert(1)>').render()
+    out = Div("<img src=x onerror=alert(1)>").render()
     assert "<img" not in out
     assert "&lt;img src=x onerror=alert(1)&gt;" in out
 

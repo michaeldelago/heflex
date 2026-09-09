@@ -24,12 +24,22 @@ from heflex import Heflex
 PAGE_SIZE = 3
 TOTAL_COMMENTS = 12
 
-comments = [f"Comment #{i}: {'x' * (i % 5 + 1)} — something said in reply." for i in range(1, TOTAL_COMMENTS + 1)]
+comments = [
+    f"Comment #{i}: {'x' * (i % 5 + 1)} — something said in reply."
+    for i in range(1, TOTAL_COMMENTS + 1)
+]
 
 
 def render_comments(start: int, end: int) -> list[Component]:
     return [
-        Div(Strong(c), style={"border": "1px solid #ccc", "padding": "0.5rem", "margin-bottom": "0.5rem"})
+        Div(
+            Strong(c),
+            style={
+                "border": "1px solid #ccc",
+                "padding": "0.5rem",
+                "margin-bottom": "0.5rem",
+            },
+        )
         for c in comments[start:end]
     ]
 
@@ -40,7 +50,11 @@ def more_button(page: int) -> Component:
         hx_get=f"/comments?page={page}",
         hx_swap="outerHTML",
         hx_target="this",
-        style={"background-color": "oklch(54.6% 0.245 262.881)", "color": "white", "border-radius": "4px"},
+        style={
+            "background-color": "oklch(54.6% 0.245 262.881)",
+            "color": "white",
+            "border-radius": "4px",
+        },
     )
 
 

@@ -29,7 +29,10 @@ class User:
         self.id_, self.name, self.email = id_, name, email
 
 
-USERS: dict[int, User] = {1: User(1, "Joe Smith", "joe@smith.org"), 2: User(2, "Amy Jones", "amy@example.com")}
+USERS: dict[int, User] = {
+    1: User(1, "Joe Smith", "joe@smith.org"),
+    2: User(2, "Amy Jones", "amy@example.com"),
+}
 
 
 def view_card(u: User) -> Component:
@@ -37,7 +40,13 @@ def view_card(u: User) -> Component:
     return Div(
         P(Strong("Name:"), u.name),
         P(Strong("Email:"), u.email),
-        Button("Edit", type="button", hx_get=f"/users/{u.id_}/edit", hx_target=f"#card-{u.id_}", hx_swap="outerHTML"),
+        Button(
+            "Edit",
+            type="button",
+            hx_get=f"/users/{u.id_}/edit",
+            hx_target=f"#card-{u.id_}",
+            hx_swap="outerHTML",
+        ),
         id=f"card-{u.id_}",
         class_="card",
     )
@@ -50,7 +59,13 @@ def edit_card(u: User) -> Component:
             Input(type="text", name="name", value=u.name),
             Input(type="email", name="email", value=u.email),
             Button("Save", type="submit"),
-            Button("Cancel", type="button", hx_get=f"/users/{u.id_}", hx_target=f"#card-{u.id_}", hx_swap="outerHTML"),
+            Button(
+                "Cancel",
+                type="button",
+                hx_get=f"/users/{u.id_}",
+                hx_target=f"#card-{u.id_}",
+                hx_swap="outerHTML",
+            ),
             hx_put=f"/users/{u.id_}",
             hx_target=f"#card-{u.id_}",
             hx_swap="outerHTML",
@@ -68,7 +83,9 @@ async def index() -> Component:
     return Div(
         H1("Users"),
         *(view_card(u) for u in USERS.values()),
-        Style(".card { border: 1px solid #ccc; padding: 0.75rem; margin-bottom: 0.75rem; max-width: 24rem; background: white; }"),
+        Style(
+            ".card { border: 1px solid #ccc; padding: 0.75rem; margin-bottom: 0.75rem; max-width: 24rem; background: white; }"
+        ),
     )
 
 
@@ -85,7 +102,9 @@ async def get_user_edit(user_id: int) -> Component:
 
 
 @hx.route("/users/{user_id}", methods=["PUT"])
-async def update_user(user_id: int, name: str = FastAPIForm(""), email: str = FastAPIForm("")) -> Component:
+async def update_user(
+    user_id: int, name: str = FastAPIForm(""), email: str = FastAPIForm("")
+) -> Component:
     """Save: update the resource and respond with the view-mode HTML."""
     u = USERS[user_id]
     if name.strip() and email.strip():

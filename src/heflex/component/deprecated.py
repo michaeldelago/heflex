@@ -274,17 +274,32 @@ def Fencedframe(*children, **kwargs) -> Component:
 
 __all__ = [
     # Inline
-    "Acronym", "Big", "Strike", "Tt",
+    "Acronym",
+    "Big",
+    "Strike",
+    "Tt",
     # Block/structural
-    "Center", "Dir", "Font",
+    "Center",
+    "Dir",
+    "Font",
     # Frames
-    "Frame", "Frameset",
+    "Frame",
+    "Frameset",
     # Conditional
-    "Noembed", "Noframes", "Noscript",
+    "Noembed",
+    "Noframes",
+    "Noscript",
     # Shadow DOM
-    "Content", "Selectedcontent", "Shadow",
+    "Content",
+    "Selectedcontent",
+    "Shadow",
     # Obsolete
-    "Geolocation", "Marquee", "Menuitem", "Nobr", "Plaintext", "Xmp",
+    "Geolocation",
+    "Marquee",
+    "Menuitem",
+    "Nobr",
+    "Plaintext",
+    "Xmp",
     # Experimental
     "Fencedframe",
 ]

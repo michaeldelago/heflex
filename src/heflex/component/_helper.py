@@ -90,11 +90,13 @@ class Component:
 
         attr_str = ""
         if rendered_attrs:
-            attr_str = f" {" ".join(rendered_attrs)}"
+            attr_str = f" {' '.join(rendered_attrs)}"
 
         # Self-closing tags handling
         if self.tag in ["input", "img", "br", "hr", "meta"]:
             return f"<{self.tag}{attr_str} />"
 
-        rendered_children = "".join(self._render_child(child) for child in self.children)
+        rendered_children = "".join(
+            self._render_child(child) for child in self.children
+        )
         return f"<{self.tag}{attr_str}>{rendered_children}</{self.tag}>"

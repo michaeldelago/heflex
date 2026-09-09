@@ -35,7 +35,7 @@ DEFAULT_TAB = "overview"
 # Single handler on the tab strip: arrows wrap, Home/End jump. Arrow keys move
 # focus AND activate (click) so the server gets the request.
 ARROW_JS = (
-    'var tabs=[...event.currentTarget.querySelectorAll(\'[role=tab]\')];'
+    "var tabs=[...event.currentTarget.querySelectorAll('[role=tab]')];"
     "var i=tabs.indexOf(document.activeElement);"
     "if(event.key==='ArrowRight'){i=(i+1)%tabs.length;}"
     "else if(event.key==='ArrowLeft'){i=(i-1+tabs.length)%tabs.length;}"
@@ -87,7 +87,12 @@ async def index() -> Component:
         H1("Server-driven tabs"),
         # Empty container; hx-trigger=load fetches the first tab. It targets
         # itself and :inherited so every fetched strip's buttons target it too.
-        Div(hx_get=f"/tab?name={DEFAULT_TAB}", hx_target="this", hx_swap="innerMorph", id="tabs-container"),
+        Div(
+            hx_get=f"/tab?name={DEFAULT_TAB}",
+            hx_target="this",
+            hx_swap="innerMorph",
+            id="tabs-container",
+        ),
         Style(
             """
             [role=tab] { padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; }

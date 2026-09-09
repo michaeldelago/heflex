@@ -45,18 +45,27 @@ def page(title: str, content: Component) -> Component:
         Head(
             Title(title),
             Script("", src="https://unpkg.com/htmx.org@4.0.0/dist/htmx.min.js"),
-            Script("", src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"),
+            Script(
+                "", src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"
+            ),
         ),
         Body(
             content,
-            style={"padding": "4rem", "background-color": "oklch(98.5% 0.002 247.839)", "color": "oklch(21% 0.034 264.665)"},
+            style={
+                "padding": "4rem",
+                "background-color": "oklch(98.5% 0.002 247.839)",
+                "color": "oklch(21% 0.034 264.665)",
+            },
         ),
     )
 
 
 def item_list() -> Div:
     return Div(
-        *(Div(Input(type="hidden", name="ids", value=i), i, class_="item") for i in ITEMS),
+        *(
+            Div(Input(type="hidden", name="ids", value=i), i, class_="item")
+            for i in ITEMS
+        ),
         id="list",
         style={"max-width": "20rem"},
     )
@@ -74,7 +83,9 @@ async def index() -> Component:
             item_list(),
             hx_post="/items",
             hx_trigger="end",
-            **{"hx-on:load": "Sortable.create(this.querySelector('#list'), { animation: 150 });"},
+            **{
+                "hx-on:load": "Sortable.create(this.querySelector('#list'), { animation: 150 });"
+            },
         ),
         Style(
             """

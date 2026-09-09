@@ -38,7 +38,7 @@ def upload_form(errors: str | None) -> Div:
             hx_target="#result",
             hx_swap="innerHTML",
         ),
-        *( [P(errors, class_="error")] if errors else [] ),
+        *([P(errors, class_="error")] if errors else []),
     )
 
 
@@ -56,7 +56,9 @@ async def index() -> Component:
 
 
 @hx.route("/upload", methods=["POST"])
-async def upload(title: str = FastAPIForm(""), file: UploadFile | None = File(None)) -> Component:
+async def upload(
+    title: str = FastAPIForm(""), file: UploadFile | None = File(None)
+) -> Component:
     """Success message — or the re-rendered form (with hx-preserve) on error."""
     if not title.strip():
         return upload_form("Title is required.")

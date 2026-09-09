@@ -51,7 +51,12 @@ async def index() -> Component:
         Div(
             bubble("Hi! How can I help?", "bot"),
             id="messages",
-            style={"max-width": "70%", "margin-left": "auto", "border": "1px solid #ccc", "padding": "0.75rem"},
+            style={
+                "max-width": "70%",
+                "margin-left": "auto",
+                "border": "1px solid #ccc",
+                "padding": "0.75rem",
+            },
         ),
         Form(
             Input(type="text", name="message", placeholder="Say something…"),

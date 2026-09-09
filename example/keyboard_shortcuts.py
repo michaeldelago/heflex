@@ -49,7 +49,11 @@ async def index() -> Component:
         Div(
             "Click the button or press Alt+Shift+D anywhere on the page…",
             id="result",
-            style={"margin-top": "0.75rem", "padding": "0.75rem", "border": "1px solid #ccc"},
+            style={
+                "margin-top": "0.75rem",
+                "padding": "0.75rem",
+                "border": "1px solid #ccc",
+            },
         ),
     )
 

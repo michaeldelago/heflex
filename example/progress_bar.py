@@ -70,10 +70,16 @@ async def index() -> Component:
             hx_post="/job",
             hx_target="#result",
             hx_swap="innerHTML",
-            style={"background-color": "oklch(54.6% 0.245 262.881)", "color": "white", "border-radius": "4px"},
+            style={
+                "background-color": "oklch(54.6% 0.245 262.881)",
+                "color": "white",
+                "border-radius": "4px",
+            },
         ),
         Div(id="result", min_height="3rem"),
-        Style(".bar { width: 100%; transform-origin: left; transition: transform 400ms ease-in-out; }"),
+        Style(
+            ".bar { width: 100%; transform-origin: left; transition: transform 400ms ease-in-out; }"
+        ),
     )
 
 
