@@ -102,16 +102,17 @@ Deprecated/obsolete tags (`Acronym`, `Applet`, `Basefont`, `Bgsound`, `Dir`, `Fo
 
 Signature: `Callable[[str, *Component], Component]` — receives `(title, *children)` and must return a `Component`. The title comes from `FastAPI`'s `title`. Heflex prepends `<!DOCTYPE html>` to the rendered layout (layouts start at `<html>`; HTMX fragments get no doctype). Default loads HTMX v4 from unpkg CDN (`htmx.org@4.0.0`) into `<head>` and wraps in a styled `<body>`.
 
-Custom layout (e.g. to add your own JS/CSS or SortableJS):
+Custom layout (e.g. to add your own JS/CSS/HTML structuring):
 
 ```python
 def page_layout(title: str, *args: Component) -> Component:
-    return Component(
-        "html",
-        Component("head", Component("title", title),
-                  Script("", src="https://unpkg.com/htmx.org@4.0.0/dist/htmx.min.js"),
-                  Style(my_css)),
-        Component("body", *args),
+    return Html(
+        Head(
+             Title(title),
+             Script("", src="https://unpkg.com/htmx.org@4.0.0/dist/htmx.min.js"),
+             Style(my_css)
+        ),
+        Body(*args),
     )
 
 hx = Heflex(FastAPI(title="App", debug=True), page_layout=page_layout)
