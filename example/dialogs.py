@@ -45,7 +45,13 @@ def modal() -> Component:
         H2("Report"),
         # Loading state until the hx-get from the open button lands.
         Div("Loading…", id="modal-body"),
-        Button("Close", type="button", command="close", style={"margin-top": "1rem"}),
+        Button(
+            "Close",
+            type="button",
+            command="close",
+            commandfor="modal",
+            style={"margin-top": "1rem"},
+        ),
         id="modal",
         closedby="any",
     )
@@ -62,17 +68,15 @@ async def index() -> Component:
             "Open a Modal",
             type="button",
             command="show-modal",
-            commandfor="#modal",
+            commandfor="modal",
             hx_get="/report",
             hx_target="#modal-body",
         ),
         modal(),
-        Style(
-            """
+        Style("""
             dialog:modal { margin: auto; padding: 1.5rem; border: none; box-shadow: 0 0 2rem rgb(0 0 0 / 0.3); }
             dialog::backdrop { background: rgb(0 0 0 / 0.5); }
-            """
-        ),
+            """),
     )
 
 

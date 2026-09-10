@@ -18,11 +18,8 @@ Route handlers return component trees that heflex renders as HTML. For HTMX requ
 heflex is not yet published to PyPI; install it from this repository (path or git):
 
 ```bash
-uv add /path/to/heflex
-# or: uv add "heflex @ git+https://<your-repo-url>"
+uv add "heflex @ git+https://github.com/michaeldelago/heflex"
 ```
-
-Once it's on PyPI, `uv add heflex` will work as-is.
 
 Requires Python 3.14+. Dependencies: `fastapi`, `python-multipart`. The files in `example/` are self-contained via PEP 723 inline metadata — just run them with `uv run example/counter.py`.
 

@@ -13,10 +13,12 @@ async def test_loads_page(page: Page, example_server: str):
 async def test_dialog_opens_on_click(page: Page, example_server: str):
     """Clicking 'Open a Modal' loads content into the dialog."""
     await page.goto(example_server)
+    dialog = page.locator("dialog#modal")
+    await expect(dialog).not_to_have_attribute("open")
     await page.get_by_role("button", name="Open a Modal").click()
     await page.wait_for_timeout(200)
     # The dialog should have loaded content (command attribute may not open in all browsers)
-    dialog = page.locator("dialog#modal")
+    await expect(dialog).to_have_attribute("open")
     await expect(dialog.locator("h2")).to_have_text("Report")
 
 
