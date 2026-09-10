@@ -71,6 +71,9 @@ async def index() -> Component:
                 style={"width": "24rem"},
             ),
             Button("Ask", type="submit"),
+            hx_post="/ask",
+            hx_target="#transcript",
+            hx_swap="beforeend scroll:bottom",
         ),
         Div(
             Button(

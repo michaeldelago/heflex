@@ -19,7 +19,7 @@
 # ///
 
 import uvicorn
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Form as FastAPIForm
 from heflex.component import (
     Component,
     Div,
@@ -87,7 +87,7 @@ async def index() -> Component:
 
 
 @hx.route("/search", methods=["POST"])
-async def search(q: str = Query("")) -> list[Component]:
+async def search(q: str = FastAPIForm("")) -> list[Component]:
     return result_rows(q)
 
 

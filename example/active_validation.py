@@ -17,7 +17,7 @@
 # ///
 
 import uvicorn
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Form as FastAPIForm
 from heflex.component import Component, Div, H1, Input, Label, Span, Style
 from heflex import Heflex
 
@@ -39,6 +39,7 @@ async def index() -> Component:
                 hx_post="/check-username",
                 hx_trigger="input changed delay:300ms",
                 hx_target="next span",
+                hx_swap="outerHTML",
             ),
         ),
         # The "next span" target that receives validation messages.
@@ -48,7 +49,7 @@ async def index() -> Component:
 
 
 @hx.route("/check-username", methods=["POST"])
-async def check_username(username: str = Query("")) -> Component:
+async def check_username(username: str = FastAPIForm("")) -> Component:
     """Validation message, or an empty span when the value is valid."""
     username = username.strip()
     if not username:

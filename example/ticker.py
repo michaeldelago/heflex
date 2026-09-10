@@ -43,12 +43,12 @@ async def home():
         ),
         Div(
             Button("Connect", id="connect"),
-            Div(
+            H2(
+                "waiting to connect…",
+                id="display",
                 hx_trigger="click from:#connect",
-                hx_swap="none",
                 **{"hx-sse:connect": "/ticker", "hx-sse:close": "done"},
             ),
-            H2("waiting to connect…", id="display"),
         ),
     )
 

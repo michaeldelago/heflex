@@ -22,7 +22,7 @@
 
 import uvicorn
 from fastapi import FastAPI
-from heflex.component import Button, Component, Div, H1, Style, Table, Td, Th, Tr
+from heflex.component import Button, Component, Div, H1, Style, Table, Td, Th, Tr, Tfoot
 from heflex import Heflex
 from starlette.responses import PlainTextResponse
 
@@ -44,13 +44,15 @@ def row(u: User) -> Component:
         Td(u.name),
         Td(u.email),
         Td(u.status.capitalize()),
-        Button(
-            "Delete",
-            type="button",
-            hx_confirm="Are you sure you want to delete this user?",
-            hx_target="closest tr",
-            hx_swap="outerHTML swap:500ms",
-            hx_delete=f"/users/{u.email}",
+        Td(
+            Button(
+                "Delete",
+                type="button",
+                hx_confirm="Are you sure you want to delete this user?",
+                hx_target="closest tr",
+                hx_swap="outerHTML swap:500ms",
+                hx_delete=f"/users/{u.email}",
+            ),
         ),
     )
 

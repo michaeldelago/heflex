@@ -34,6 +34,7 @@ from heflex.component import (
     Td,
     Th,
     Tr,
+    Thead,
 )
 from heflex import Heflex
 
@@ -59,7 +60,7 @@ hx = Heflex(FastAPI(debug=True, title="Bulk Actions"))
 def full_table(flash: str | None) -> Component:
     rows = [
         Tr(
-            Input(type="checkbox", **{"name": "selected", "value": u.email}),
+            Td(Input(type="checkbox", **{"name": "selected", "value": u.email})),
             Td(u.name),
             Td(u.email),
             Td(u.status.capitalize()),
@@ -95,15 +96,17 @@ def full_table(flash: str | None) -> Component:
         *([P(flash, class_="flash")] if flash else []),
         action_bar,
         Table(
-            Tr(
-                Input(
-                    type="checkbox",
-                    id="select-all",
-                    onclick='this.parentElement.parentElement.querySelectorAll("input[name=selected]").forEach(cb => cb.checked = this.checked)',
+            Thead(
+                Tr(
+                    Td(Input(
+                        type="checkbox",
+                        id="select-all",
+                        onclick='this.closest("form").querySelectorAll("input[name=selected]").forEach(cb => cb.checked = this.checked)',
+                    )),
+                    Th("Name"),
+                    Th("Email"),
+                    Th("Status"),
                 ),
-                Th("Name"),
-                Th("Email"),
-                Th("Status"),
             ),
             *rows,
         ),
@@ -153,9 +156,9 @@ async def bulk_deactivate(selected: list[str] = FastAPIForm([])) -> Component:
 
 @hx.route("/bulk/delete", methods=["POST"])
 async def bulk_delete(selected: list[str] = FastAPIForm([])) -> Component:
-    global USERS
-    deleted = [u.email for u in USERS if u.email in selected]
-    USERS = [u for u in USERS if u not in deleted]
+    deleted = {u.email for u in USERS if u.email in selected}
+    remaining = [u for u in USERS if u.email not in deleted]
+    USERS[:] = remaining
     return full_table(f"Deleted {len(deleted)} user")
 
 
