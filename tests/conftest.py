@@ -7,15 +7,15 @@ provides a ``page`` fixture wired to the running server.
 
 from __future__ import annotations
 
-import asyncio
-import os
 import socket
-import subprocess
 import sys
-import time
 from pathlib import Path
+import uvicorn
+import importlib
+import threading
+import urllib.request
+import time
 
-from fastapi.testclient import TestClient
 
 import pytest
 
@@ -28,14 +28,11 @@ def _find_free_port() -> int:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind(("127.0.0.1", 0))
         s.listen(1)
-        port = s.getsockname()[1]
-    return port
+        return s.getsockname()[1]
 
 
 def _wait_for_server(url: str, timeout: float = 10) -> None:
     """Block until the server responds with HTTP 200."""
-    import urllib.request
-
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         try:
@@ -46,6 +43,14 @@ def _wait_for_server(url: str, timeout: float = 10) -> None:
             pass
         time.sleep(0.1)
     raise RuntimeError(f"Server at {url} did not become ready in {timeout}s")
+
+
+def import_from_path(module_name, file_path):
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 @pytest.fixture
@@ -73,25 +78,14 @@ async def example_server(request):
     port = _find_free_port()
     url = f"http://127.0.0.1:{port}"
 
-    proc = subprocess.Popen(
-        [
-            sys.executable, "-m", "uvicorn",
-            f"example.{example_name}:app",
-            f"--port={port}",
-            "--host=127.0.0.1",
-            "--log-level=warning",
-        ],
-        cwd=str(PROJECT_ROOT),
-        env={**dict(os.environ), "PYTHONPATH": str(PROJECT_ROOT)},
-    )
+    mod = import_from_path(example_name, example_path)
 
-    try:
-        _wait_for_server(url)
-        yield url
-    finally:
-        proc.terminate()
-        try:
-            proc.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            proc.kill()
-            proc.wait()
+    config = uvicorn.Config(mod.app, host="127.0.0.1", port=port, log_level="warning")
+    server = uvicorn.Server(config)
+
+    thread = threading.Thread(target=server.run, daemon=True)
+    thread.start()
+
+    _wait_for_server(url)
+
+    yield url
