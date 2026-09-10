@@ -51,4 +51,6 @@ async def test_loads_all_comments(page: Page, example_server: str):
     comments = page.locator("div > strong")
     await expect(comments).to_have_count(12)
     # Button should no longer be visible (no more pages)
-    await expect(page.get_by_role("button", name="Show more comments")).not_to_be_visible()
+    await expect(
+        page.get_by_role("button", name="Show more comments")
+    ).not_to_be_visible()

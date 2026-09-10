@@ -22,15 +22,15 @@ async def test_items_in_order(page: Page, example_server: str):
 async def test_drag_submits_to_server(page: Page, example_server: str):
     """After dragging, the new order is submitted and a flash message appears."""
     await page.goto(example_server)
-    
+
     # Get the first item
     items = page.locator(".item")
     first_item = items.first
     second_item = items.nth(1)
-    
+
     # Drag the first item after the second item
     await first_item.drag_to(second_item, target_position={"x": 0, "y": 20})
     await page.wait_for_timeout(800)
-    
+
     # Check for flash message
     await expect(page.locator(".flash")).to_contain_text("Order saved")

@@ -15,7 +15,9 @@ async def test_first_tab_active(page: Page, example_server: str):
     # Check that the overview tab content is visible
     await expect(page.locator("text=Overview content")).to_be_visible()
     # Check that the overview tab is selected
-    await expect(page.locator("#tab-overview")).to_have_attribute("aria-selected", "true")
+    await expect(page.locator("#tab-overview")).to_have_attribute(
+        "aria-selected", "true"
+    )
 
 
 async def test_switching_tabs(page: Page, example_server: str):
@@ -27,9 +29,13 @@ async def test_switching_tabs(page: Page, example_server: str):
     # Check that the install tab content is visible
     await expect(page.locator("text=Install content")).to_be_visible()
     # Check that the install tab is selected
-    await expect(page.locator("#tab-install")).to_have_attribute("aria-selected", "true")
+    await expect(page.locator("#tab-install")).to_have_attribute(
+        "aria-selected", "true"
+    )
     # Check that the overview tab is not selected
-    await expect(page.locator("#tab-overview")).to_have_attribute("aria-selected", "false")
+    await expect(page.locator("#tab-overview")).to_have_attribute(
+        "aria-selected", "false"
+    )
 
 
 async def test_switching_to_extensions(page: Page, example_server: str):
@@ -41,4 +47,6 @@ async def test_switching_to_extensions(page: Page, example_server: str):
     # Check that the extensions tab content is visible
     await expect(page.locator("text=Extensions content")).to_be_visible()
     # Check that the extensions tab is selected
-    await expect(page.locator("#tab-extensions")).to_have_attribute("aria-selected", "true")
+    await expect(page.locator("#tab-extensions")).to_have_attribute(
+        "aria-selected", "true"
+    )

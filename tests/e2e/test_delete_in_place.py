@@ -14,17 +14,17 @@ async def test_loads_users_table(page: Page, example_server: str):
 async def test_delete_confirms_and_removes(page: Page, example_server: str):
     """Clicking Delete shows confirmation, accepting removes the row."""
     await page.goto(example_server)
-    
+
     # Set up dialog handler
     async def handle_dialog(dialog):
         await dialog.accept()
-    
+
     page.on("dialog", handle_dialog)
-    
+
     # Click the first delete button
     await page.locator("table tr").nth(1).locator("button").click()
     await page.wait_for_timeout(800)
-    
+
     # Row should be removed
     row_count = await page.locator("table tr").count()
     assert row_count == 3  # header + 2 users
@@ -33,17 +33,17 @@ async def test_delete_confirms_and_removes(page: Page, example_server: str):
 async def test_delete_removes_row(page: Page, example_server: str):
     """Confirming delete removes the row with fade-out animation."""
     await page.goto(example_server)
-    
+
     # Set up dialog handler
     async def handle_dialog(dialog):
         await dialog.accept()
-    
+
     page.on("dialog", handle_dialog)
-    
+
     # Click the second delete button
     await page.locator("table tr").nth(2).locator("button").click()
     await page.wait_for_timeout(800)
-    
+
     # Row should be removed
     row_count = await page.locator("table tr").count()
     assert row_count == 3  # header + 2 users
@@ -52,13 +52,13 @@ async def test_delete_removes_row(page: Page, example_server: str):
 async def test_delete_all_rows(page: Page, example_server: str):
     """Deleting all rows removes them one by one."""
     await page.goto(example_server)
-    
+
     # Set up dialog handler
     async def handle_dialog(dialog):
         await dialog.accept()
-    
+
     page.on("dialog", handle_dialog)
-    
+
     # Delete all 3 rows
     for _ in range(3):
         row_count = await page.locator("table tr").count()
@@ -66,7 +66,7 @@ async def test_delete_all_rows(page: Page, example_server: str):
             break
         await page.locator("table tr").nth(1).locator("button").click()
         await page.wait_for_timeout(800)
-    
+
     # Only header row should remain
     row_count = await page.locator("table tr").count()
     assert row_count == 1

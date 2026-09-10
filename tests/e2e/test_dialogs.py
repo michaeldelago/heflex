@@ -30,7 +30,7 @@ async def test_dialog_loads_content(page: Page, example_server: str):
     await expect(dialog.locator("text=Region")).to_be_attached()
     await expect(dialog.locator("text=Sales")).to_be_attached()
     await expect(dialog.locator("text=North")).to_be_attached()
-    await expect(dialog.locator("text=\"$12,400\"")).to_be_attached()
+    await expect(dialog.locator('text="$12,400"')).to_be_attached()
 
 
 async def test_dialog_closes(page: Page, example_server: str):

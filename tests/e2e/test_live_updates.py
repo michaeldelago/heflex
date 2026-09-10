@@ -27,7 +27,7 @@ async def test_prices_update(page: Page, example_server: str):
     await page.goto(example_server)
     # Wait for the SSE connection to open
     await page.wait_for_timeout(1000)
-    
+
     # Check that all rows are visible
     await expect(page.locator("#row-HTMX")).to_be_visible()
     await expect(page.locator("#row-REST")).to_be_visible()

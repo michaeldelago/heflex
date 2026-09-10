@@ -44,7 +44,7 @@ async def test_selecting_different_make_updates_models(page: Page, example_serve
     model_select = page.locator("#models")
     options = await model_select.locator("option").all_text_contents()
     assert "Corolla" in options
-    
+
     # Select Honda using JavaScript
     await page.evaluate("""
         const select = document.querySelector('select[name="make"]');

@@ -33,7 +33,9 @@ async def test_pause_stops_polling(page: Page, example_server: str):
     text = await card.text_content()
     assert "Job complete (paused)" in text
     # Check that the Pause button is now "Resume"
-    await expect(page.locator("#poll-card").get_by_role("button", name="Resume")).to_be_visible()
+    await expect(
+        page.locator("#poll-card").get_by_role("button", name="Resume")
+    ).to_be_visible()
 
 
 async def test_resume_restarts_polling(page: Page, example_server: str):
@@ -46,7 +48,7 @@ async def test_resume_restarts_polling(page: Page, example_server: str):
     card = page.locator("#poll-card")
     text = await card.text_content()
     assert "Job complete (paused)" in text
-    
+
     # Click Resume
     await page.locator("#poll-card").get_by_role("button", name="Resume").click()
     await page.wait_for_timeout(500)

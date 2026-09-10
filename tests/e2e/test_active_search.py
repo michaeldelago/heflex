@@ -37,5 +37,7 @@ async def test_search_clears(page: Page, example_server: str):
 async def test_no_matches_shows_message(page: Page, example_server: str):
     """Searching for something with no matches shows a 'No matches' row."""
     await page.goto(example_server)
-    await page.get_by_placeholder("Search name or email…").type("zzzznonexistent", delay=50)
+    await page.get_by_placeholder("Search name or email…").type(
+        "zzzznonexistent", delay=50
+    )
     await expect(page.locator("text=No matches.")).to_be_visible(timeout=5000)

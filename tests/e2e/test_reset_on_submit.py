@@ -44,12 +44,12 @@ async def test_multiple_messages(page: Page, example_server: str):
     await page.locator('input[name="message"]').fill("First")
     await page.locator('input[name="message"]').press("Enter")
     await page.wait_for_timeout(300)
-    
+
     # Send second message
     await page.locator('input[name="message"]').fill("Second")
     await page.locator('input[name="message"]').press("Enter")
     await page.wait_for_timeout(300)
-    
+
     # Check that all messages are visible
     await expect(page.locator('text="First"')).to_be_visible()
     await expect(page.locator("text=Echo: First")).to_be_visible()

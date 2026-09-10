@@ -36,7 +36,7 @@ async def test_loads_all_rows(page: Page, example_server: str):
     for _ in range(5):
         await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
         await page.wait_for_timeout(500)
-    
+
     # Should have all 15 agents
     for i in range(15):
         await expect(page.locator(f"text='Agent #{i}'")).to_be_visible()

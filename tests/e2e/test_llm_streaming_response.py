@@ -42,7 +42,7 @@ async def test_clear_empties_transcript(page: Page, example_server: str):
     transcript = page.locator("#transcript")
     text = await transcript.text_content()
     assert len(text) > 0
-    
+
     # Click Clear
     await page.get_by_role("button", name="Clear").click()
     await page.wait_for_timeout(300)

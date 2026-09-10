@@ -21,16 +21,16 @@ async def test_items_in_order(page: Page, example_server: str):
 async def test_drag_reorders_items(page: Page, example_server: str):
     """Dragging an item to a new position reorders the items."""
     await page.goto(example_server)
-    
+
     # Get the first item
     items = page.locator(".zz-sortable-item")
     first_item = items.first
     second_item = items.nth(1)
-    
+
     # Drag the first item after the second item
     await first_item.drag_to(second_item, target_position={"x": 0, "y": 20})
     await page.wait_for_timeout(800)
-    
+
     # Check that the items have been reordered
     # The server responds with the new order, so the items should be re-rendered
     items = page.locator(".zz-sortable-item")
